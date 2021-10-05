@@ -1,0 +1,8 @@
+<mat-form-field>
+    <input [class.is-invalid]='ngControl.touched && ngControl.invalid' matInput placeholder="{{label}}" [formControl]="ngControl.control" type={{type}}/>
+    <mat-error *ngIf="ngControl.errors?.required">
+        {{error}}
+    </mat-error>
+    <mat-error *ngIf="ngControl.errors?.minlength">Lütfen en az {{ minlength }} karakter giriniz</mat-error>
+    <mat-error *ngIf="ngControl.errors?.maxlength">Lütfen en fazla {{ maxlength }} karakter giriniz</mat-error>
+</mat-form-field>

@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "cost-computation": {
+      "hosting": {
+        "cost-calculator": [
+          "cost-computation"
+        ]
+      }
+    }
+  }
+}

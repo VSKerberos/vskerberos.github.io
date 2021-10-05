@@ -1,0 +1,82 @@
+<mat-dialog-content>
+    <div class="container" fxLayout="row" fxLayoutAlign="center none">
+        <div fxFlex="95%">
+            <form [formGroup]="materialForm" (ngSubmit)=" materialForm.valid && submitForm()" autocomplete="off">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>
+                            <h2 mat-dialog-title>{{dialogTitle}}</h2>
+                        </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="row">
+                            <div>
+                                <app-text-input [formControl]='materialForm.controls["name"]' [label]='"malzeme adı"' [error]="'Lütfen malzeme adı giriniz'" [minlength]='"3"' [maxlength]='"40"'></app-text-input>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div>
+                                <app-text-input [formControl]='materialForm.controls["unit"]' [label]='"birimi"' [error]="'Lütfen birimi giriniz'" [maxlength]='"40"'></app-text-input>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div>
+                                <app-text-input [formControl]='materialForm.controls["dimension"]' [label]='"ölçü"' [error]="'Lütfen ölçüsünü giriniz'" [maxlength]='"40"'></app-text-input>
+
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div>
+
+
+                                <app-text-input [formControl]='materialForm.controls["weight"]' [label]='"ağırlık"' [error]="'Lütfen ağırlık giriniz'" [maxlength]='"40"'></app-text-input>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div>
+
+                                <app-text-input [formControl]='materialForm.controls["price"]' [label]='"fiyat"' [error]="'Lütfen fiyat giriniz'" [maxlength]='"40"'></app-text-input>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div>
+
+                                <app-text-input [formControl]='materialForm.controls["remarks"]' [label]='"açıklama"' [error]="'Lütfen açıklama giriniz'"></app-text-input>
+
+                            </div>
+                        </div>
+
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <button color="primary" [disabled]='!materialForm.valid' mat-raised-button>
+                        Kaydet 
+                    </button>
+
+                        <button color="secondary" (click)="cancel()" mat-raised-button>
+                        Temizle
+                    </button>
+
+                        <button color="secondary" (click)="onClose()" mat-raised-button>
+                        Kapat
+                    </button>
+
+                    </mat-card-actions>
+
+                </mat-card>
+
+
+
+
+
+
+
+            </form>
+        </div>
+
+    </div>
+
+</mat-dialog-content>
