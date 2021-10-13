@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Observable, timer } from 'rxjs';
 import { FireBaseService, IMaterial } from 'src/app/core/services/fire-base.service';
-import { delay } from 'rxjs/internal/operators';
+import { delay, shareReplay } from 'rxjs/internal/operators';
 import { of } from "rxjs";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { error } from '@angular/compiler/src/util';
@@ -63,6 +63,10 @@ export class MaterialComponent implements OnInit {
       .afterClosed()
       .subscribe(() => this.courseChanged.emit());
 
+      var number = 1434.02;
+      console.log(new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'TRY' }).format(number));
+      // → 123.456,79 €
+
 }
 
 addMaterial(){
@@ -85,11 +89,12 @@ addMaterial(){
       .subscribe(res =>( 
         this.materialList = this.dataSource= res, 
         console.log(res),
-        this.spinnerService.display(false)
+        this.spinnerService.display(false),
+        shareReplay()
         
         ))};
 
-   
+     
 
 }
 

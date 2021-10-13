@@ -4,7 +4,22 @@ import { MaterialComponent } from './material.component';
 import {MaterialRoutingModule} from './material-routing.module';
 import { SharedModule } from '../../shared/shared.module';
 import { MaterialEntryComponent } from './material-entry/material-entry.component';
+import { CurrencyMaskInputMode, NgxCurrencyModule } from 'ngx-currency';
 
+export const customCurrencyMaskConfig = {
+  align: "right",
+  allowNegative: true,
+  allowZero: true,
+  decimal: ",",
+  precision: 2,
+  prefix: " ",
+  suffix: " TRY",
+  thousands: ".",
+  nullable: true,
+  min: null,
+  max: null,
+  inputMode: CurrencyMaskInputMode.FINANCIAL
+};
 
 
 @NgModule({
@@ -15,7 +30,8 @@ import { MaterialEntryComponent } from './material-entry/material-entry.componen
   imports: [
     CommonModule,
     SharedModule,
-    MaterialRoutingModule
+    MaterialRoutingModule,
+    NgxCurrencyModule.forRoot(customCurrencyMaskConfig)
     
   ]
 })

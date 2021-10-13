@@ -80,6 +80,10 @@ export class MaterialEntryComponent implements OnInit {
   }
   else if(this.mode == 'update'){
   
+    
+    var number = this.materialForm.value;
+    console.log(new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'TRY' }).format(number));
+
     this.firebaseService.updateMaterial(this.materialForm.value,this.recordId).catch(error=> {
       console.log(error);
     });

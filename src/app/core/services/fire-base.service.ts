@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
-import { map } from 'rxjs/internal/operators';
+import { map, shareReplay } from 'rxjs/internal/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +12,34 @@ export class FireBaseService {
 
 
   getMaterials(){
-    return this.firestore.collection('material').snapshotChanges();
+    return this.firestore.collection('material').snapshotChanges().pipe(
+      shareReplay()
+    );
+
+    /*
+  loadItems() {
+    this.firestore.collection('People', ref => ref
+      .limit(5)
+      .orderBy('timestamp', 'desc')
+    ).snapshotChanges()
+      .subscribe(response => {
+        ...
+        ...
+      }, error => {
+      });
+  }
+
+    */
   }
 
   addMaterial(payload: IMaterial)
   {
-    return this.firestore.collection('material').add(payload);
+    return this.firestore.collection('material').add(payload).then(response =>{
+      console.log("add item console:"+ response.id);
+    }).catch(error=>{
+      console.log("add item error:"+error)
+    });
+
   }
 
   deleteMaterial(data)

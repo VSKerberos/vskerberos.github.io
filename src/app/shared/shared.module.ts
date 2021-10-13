@@ -17,6 +17,7 @@ import { ProgressSpinnerComponent } from './components/progress-spinner/progress
 import {SpinnerService} from '../core/spinner.service';
 
 
+
 @NgModule({
   declarations: [
     LayoutComponent,
@@ -35,7 +36,8 @@ import {SpinnerService} from '../core/spinner.service';
     AngularFirestoreModule, 
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule, // firestore
-    AngularFireAuthModule // aut
+    AngularFireAuthModule, // aut,
+  
     
   ],
   exports: [
