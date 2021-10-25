@@ -15,6 +15,7 @@ import {FireBaseService} from '../core/services/fire-base.service';
 import { TextInputComponent } from './components/text-input.component';
 import { ProgressSpinnerComponent } from './components/progress-spinner/progress-spinner.component';
 import {SpinnerService} from '../core/spinner.service';
+import {CategoryNamePipe} from './pipes/categorytext.pipe'
 
 
 
@@ -22,7 +23,8 @@ import {SpinnerService} from '../core/spinner.service';
   declarations: [
     LayoutComponent,
     TextInputComponent,
-    ProgressSpinnerComponent
+    ProgressSpinnerComponent,
+    CategoryNamePipe
   ],
   imports: [
     RouterModule,
@@ -43,11 +45,12 @@ import {SpinnerService} from '../core/spinner.service';
   exports: [
     FormsModule,
     ReactiveFormsModule,
-    CustomMaterialModule,
+    CustomMaterialModule,    
     MatInputModule,
     FlexLayoutModule,
     TextInputComponent,
-    ProgressSpinnerComponent
+    ProgressSpinnerComponent,
+    CategoryNamePipe
   ],
   providers: [FireBaseService,SpinnerService]
 })

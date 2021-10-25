@@ -20,21 +20,8 @@
 
                             </div>
                         </div>
-                        <div class="row">
-                            <div>
-                                <app-text-input [formControl]='materialForm.controls["dimension"]' [label]='"ölçü"' [error]="'Lütfen ölçüsünü giriniz'" [maxlength]='"40"'></app-text-input>
 
 
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div>
-
-
-                                <app-text-input [formControl]='materialForm.controls["weight"]' [label]='"ağırlık"' [error]="'Lütfen ağırlık giriniz'" [maxlength]='"40"'></app-text-input>
-
-                            </div>
-                        </div>
                         <div class="row">
                             <div>
 
@@ -49,6 +36,32 @@
                                 <app-text-input [formControl]='materialForm.controls["remarks"]' [label]='"açıklama"' [error]="'Lütfen açıklama giriniz'"></app-text-input>
 
                             </div>
+                        </div>
+                        <div class="row">
+
+                            <mat-form-field>
+                                <mat-label>Kategori </mat-label>
+                                <mat-select formControlName="groups" [errorStateMatcher]="matcher">
+                                    <mat-option *ngFor="let cat of categoryArr" [value]="cat.categoryid">
+                                        {{cat.title}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+
+
+
+                        </div>
+                        <div class="row">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Kayıt Tarihi</mat-label>
+                                <input formControlName="operationdate" matInput [matDatepicker]="picker">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+
+
+
                         </div>
 
                     </mat-card-content>

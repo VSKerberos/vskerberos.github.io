@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FireBaseService } from 'src/app/core/services/fire-base.service';
 
 @Component({
   selector: 'app-dashboard-home',
@@ -8,11 +9,11 @@ import { Component, OnInit } from '@angular/core';
 export class DashboardHomeComponent implements OnInit {
   currentUser: any;
 
-  constructor() { }
+  constructor(    private firebaseService: FireBaseService, ) { }
 
   ngOnInit(): void {
     
-
+this.firebaseService.getCategories();
     setTimeout(() => {
       
     });

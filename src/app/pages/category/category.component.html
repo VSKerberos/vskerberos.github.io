@@ -1,0 +1,88 @@
+<div class="container">
+
+    <div class="mat-display-3 special-header" fxLayoutAlign="center center">
+        Kategori Tanımlama
+    </div>
+
+    <mat-dialog-content>
+        <div class="container" fxLayout="row" fxLayoutAlign="center none">
+            <div fxFlex="95%">
+                <form [formGroup]="categoryForm" (ngSubmit)=" categoryForm.valid && submitForm()" autocomplete="off">
+                    <mat-card>
+                        <mat-card-header>
+                            <mat-card-title>
+                                <h2 mat-dialog-title> </h2>
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="row">
+                                <div>
+                                    <app-text-input [formControl]='categoryForm.controls["title"]' [label]='"Kategori adı"' [error]="'Lütfen kategori adı giriniz'" [minlength]='"3"' [maxlength]='"40"'></app-text-input>
+                                </div>
+                            </div>
+
+
+
+                        </mat-card-content>
+                        <mat-card-actions>
+                            <button color="primary" [disabled]='!categoryForm.valid' mat-raised-button>
+                            Kaydet 
+                        </button>
+
+                            <button color="secondary" (click)="cancel()" mat-raised-button>
+                            Temizle
+                        </button>
+
+
+
+                        </mat-card-actions>
+
+                    </mat-card>
+
+
+
+
+
+
+
+                </form>
+            </div>
+
+        </div>
+
+    </mat-dialog-content>
+
+
+</div>
+
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef> Kategori Kodu </th>
+        <td mat-cell *matCellDef="let element"> {{element.categoryid}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Kategori Adı </th>
+        <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="demo-actions">
+        <th mat-header-cell *matHeaderCellDef> İşlem Bölümü</th>
+        <md-cell *matCellDef="let element">
+            <button mat-raised-button color="primary" (click)="updateRecord(element)"> <mat-icon>build</mat-icon> Güncelle</button> &nbsp;
+            <button mat-raised-button color="warn" (click)="deleteRecord(element.id)">   <mat-icon>delete_outline</mat-icon> Sil</button>
+
+
+        </md-cell>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

@@ -1,7 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FireBaseService, IMaterial } from 'src/app/core/services/fire-base.service';
+import { FireBaseService } from 'src/app/core/services/fire-base.service';
+import { MatFormFieldControl } from '@angular/material/form-field';
+import { ICategory } from 'src/app/core/core/models/category';
+import { ErrorStateMatcher } from '@angular/material/core';
+import {IMaterial} from '../../../core/core/models/material'
+
 
 @Component({
   selector: 'app-material-entry',
@@ -15,7 +20,13 @@ export class MaterialEntryComponent implements OnInit {
   dialogTitle: string;
   recordId: string;
   material: IMaterial;
-
+  categoryArr:ICategory[];
+  matcher = new MyErrorStateMatcher();
+  startDate: Date;
+  mystartDate:Date;
+  localMaterial:IMaterial;
+  yourDate:any;
+  
   constructor(
      private firebaseService: FireBaseService,
      public fb: FormBuilder,
@@ -30,6 +41,7 @@ export class MaterialEntryComponent implements OnInit {
       if (this.mode == 'update') {
 
         this.reactiveForm();
+        console.log('@@@@@@:'+this.material.operationdate);
         
         /*
         this.materialForm.get("name").patchValue(data.material.payload.doc.data().name);
@@ -40,41 +52,75 @@ export class MaterialEntryComponent implements OnInit {
         console.log("dasdasd:"+data.material.payload.doc.data().name);
         
         */
-        this.materialForm.patchValue({name: data.material.payload.doc.data().name});
-        this.materialForm.patchValue({unit: data.material.payload.doc.data().unit});
-        this.materialForm.patchValue({weight: data.material.payload.doc.data().weight});
-        this.materialForm.patchValue({price: data.material.payload.doc.data().price});
-        this.materialForm.patchValue({remarks: data.material.payload.doc.data().remarks});
-        this.materialForm.patchValue({dimension: data.material.payload.doc.data().dimension});
+        this.materialForm.patchValue({name:  this.material.name});
+        this.materialForm.patchValue({unit:  this.material.unit});
+        this.materialForm.patchValue({price: data.material.price});
+        this.materialForm.patchValue({remarks: data.material.remarks});
+        if(this.material.operationdate){
+        let s =this.material.operationdate.split('/');
+        this.yourDate = new Date(Number(s[2]),Number(s[1])-1,Number(s[0]));
+        }
+        this.materialForm.get('operationdate').patchValue(this.yourDate);
+        this.materialForm.get('groups').patchValue(this.material.groupcode);
       } else if(this.mode = 'create'){
         this.reactiveForm();
+        this.mystartDate = new Date();
+        const stringDate: string = `${this.mystartDate.getDate()}/${this.mystartDate.getMonth()+1}/${this.mystartDate.getFullYear()}`;
+      
       }
 
       //data.material.payload.doc.data().name
-
+      
      }
 
   ngOnInit(): void {
   //  this.reactiveForm();
+  
+
+
+  this.getCategories();
+
+
   }
 
   reactiveForm() {
     this.materialForm = this.fb.group({
       name: ['',[Validators.required,Validators.minLength(3),Validators.maxLength(50)]],
       unit: ['',Validators.required],
-      weight: ['',Validators.required],
       price: ['',Validators.required],      
       remarks: ['',Validators.required],
-      dimension: ['',Validators.required]
-    })
+      groups:[null,Validators.required],
+      operationdate:[Date,Validators.required]
+      
+    });
+
+  
   }
 
   submitForm(){
-    console.log( this.materialForm.value);
+    let t = this.materialForm.get('groups').value;
+    let currentdate = this.materialForm.get('operationdate').value as Date;
+    let nn = new Date(currentdate.getFullYear(),currentdate.getMonth()+1,currentdate.getDate());
+    const stringDate: string = `${currentdate.getDate()}/${currentdate.getMonth()+1}/${currentdate.getFullYear()}`;
+
+    this.localMaterial= {
+      name : this.materialForm.get('name').value ,
+      unit :this.materialForm.get('unit').value ,
+      price:this.materialForm.get('price').value ,
+      operationdate:stringDate ,
+      groupcode :t,
+      remarks:this.materialForm.get('remarks').value ,
+      orderno:1
+    }
+    
+    let s = this.materialForm.get('operationdate').value as Date;
+
+    console.log('operationdate: '+ stringDate);
     
     if(this.mode == 'create'){
 
-    this.firebaseService.addMaterial(this.materialForm.value).catch(error =>{
+
+    this.firebaseService.addMaterial(this.localMaterial).catch(error =>{
       console.log(error);
     });
   }
@@ -84,7 +130,7 @@ export class MaterialEntryComponent implements OnInit {
     var number = this.materialForm.value;
     console.log(new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'TRY' }).format(number));
 
-    this.firebaseService.updateMaterial(this.materialForm.value,this.recordId).catch(error=> {
+    this.firebaseService.updateMaterial(this.localMaterial,this.recordId).catch(error=> {
       console.log(error);
     });
   }
@@ -105,4 +151,22 @@ export class MaterialEntryComponent implements OnInit {
     this.dialogRef.close([]);
   }
 
+  getCategories(){
+    this.firebaseService.getCategories();
+    this.firebaseService.categories$.subscribe((categories)=> {
+      this.categoryArr = categories as ICategory[]
+  });
+  }
+
+
 }
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+
+ 
+
+}
+

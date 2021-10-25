@@ -18,6 +18,10 @@ const routes: Routes = [
   .then(mod => mod.MaterialModule)
 },
 {
+  path:'category',
+  loadChildren:()=> import('./pages/category/category.module').then(mod=>mod.CategoryModule)
+},
+{
     path: '**',
     redirectTo: 'dashboard',
     pathMatch: 'full'
