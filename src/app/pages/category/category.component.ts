@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { Observable, of, pipe } from 'rxjs';
 import { filter, map, max, mergeMap, scan, tap } from 'rxjs/internal/operators';
 import { ICategory } from 'src/app/core/core/models/category';
 import { FireBaseService } from 'src/app/core/services/fire-base.service';
@@ -32,6 +32,13 @@ this.getItems();
   getItems(){
     this.firebaseService.getCategories();
     this.categories$ = this.firebaseService.categories$;
+   
+    this.categories$ = this.categories$.pipe(map((data) => {
+      data.sort((a, b) => {
+          return a.categoryid < b.categoryid ? -1 : 1;
+       });
+      return data;
+      }));
     this.dataSource = this.categories$;
     this.mode ='create';
   }

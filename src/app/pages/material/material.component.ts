@@ -22,7 +22,7 @@ export class MaterialComponent implements OnInit {
   //public materialList: IMaterial[] = [];
   
   materialList: any;
-  displayedColumns: string[] = [ 'demo-name', 'demo-unit', 'demo-weight','demo-dimension','demo-symbol','demo-remarks','demo-actions'];
+  displayedColumns: string[] = [ 'demo-weight','demo-name', 'demo-unit','demo-symbol', 'demo-dimension','demo-remarks','demo-actions'];
   dataSource;
   materials$: Observable<IMaterial[]>;
   materialArr:IMaterial[];
@@ -53,18 +53,37 @@ export class MaterialComponent implements OnInit {
     //this.dataSource = this.materialArr;
   }
   getArrayFromObservable(){
-    this.materials$.subscribe((categories)=> {
+
+    let sorted$: Observable<IMaterial[]> = this.materials$.pipe(
+      map(items=> items.sort(this.sortByGroupCode))
+    );
+
+  
+
+    sorted$.subscribe((categories)=> {
+      categories= categories.sort(x=>x.groupcode),
       this.materialArr = categories as IMaterial[]
   });
 
-this.materialArr.forEach(element => {
-  element.grouptext ='wewe';
-});
+  
+  
+  
 
-this.materialArr = [...this.materialArr];
+
+
 
   
 }
+
+sortByGroupCode(a,b) {
+  if (a.groupcode < b.groupcode)
+    return -1;
+  if (a.groupcode > b.groupcode)
+    return 1;
+  return 0;
+}
+
+
 
   deleteRecord(id: any){
 

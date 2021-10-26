@@ -13,14 +13,30 @@
     font-size: large;
 }
 
-.mat-column-demo-weight {}
+.mat-column-demo-weight {
+    padding-left: 15px;
+}
+
+.mat-column-demo-symbol {
+    padding-left: 25px;
+}
+
+.mat-column-demo-remarks {
+    padding-left: 25px;
+}
 
 .mat-column-demo-unit {
     font-size: large;
+    padding-left: 15px;
+    ;
+}
+
+.mat-column-demo-dimension {
+    padding-left: 35px;
 }
 
 th.mat-column-demo-dimension {
-    font-size: 20px;
+    font-size: 18px;
 }
 
 td.mat-column-demo-dimension {
@@ -49,6 +65,7 @@ th.mat-column-demo-remarks {
 
 td.mat-column-demo-remarks {
     font-size: 20px;
+    width: fit-content;
 }
 
 .mat-column-demo-symbol>thead {
