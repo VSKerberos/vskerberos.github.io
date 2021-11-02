@@ -73,6 +73,10 @@
                     </mat-icon>
                     <p mat-line> Customers </p>
                 </a> -->
+                <a mat-list-item [routerLink]="['/product']">
+                    <mat-icon mat-list-icon>receipt</mat-icon>
+                    <p mat-line> Ürün Bilgileri </p>
+                </a>
                 <a mat-list-item [routerLink]="['/material']" routerLinkActive="active">
                     <mat-icon mat-list-icon>
                         construction
@@ -82,8 +86,10 @@
 
                 <a mat-list-item [routerLink]="['/category']">
                     <mat-icon mat-list-icon>straighten</mat-icon>
-                    <p mat-line> Kategori Girişi </p>
+                    <p mat-line> Grup Girişi </p>
                 </a>
+
+
 
                 <a mat-list-item [routerLink]="['/']">
                     <mat-icon mat-list-icon>exit_to_app</mat-icon>

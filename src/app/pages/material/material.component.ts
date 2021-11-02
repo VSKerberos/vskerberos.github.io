@@ -1,10 +1,7 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {  Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Observable, timer } from 'rxjs';
 import { FireBaseService } from 'src/app/core/services/fire-base.service';
-import { delay, every, map, shareReplay } from 'rxjs/internal/operators';
-import { of } from "rxjs";
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { error } from '@angular/compiler/src/util';
+import {  map, shareReplay } from 'rxjs/internal/operators';
 import { SpinnerService } from 'src/app/core/spinner.service';
 import { MatDialog } from '@angular/material/dialog';
 import {defaultDialogConfig } from './default-dialog-config'

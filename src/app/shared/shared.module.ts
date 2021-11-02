@@ -16,6 +16,7 @@ import { TextInputComponent } from './components/text-input.component';
 import { ProgressSpinnerComponent } from './components/progress-spinner/progress-spinner.component';
 import {SpinnerService} from '../core/spinner.service';
 import {CategoryNamePipe} from './pipes/categorytext.pipe'
+import {UtilityService} from '../core/services/utility.service';
 
 
 
@@ -52,6 +53,6 @@ import {CategoryNamePipe} from './pipes/categorytext.pipe'
     ProgressSpinnerComponent,
     CategoryNamePipe
   ],
-  providers: [FireBaseService,SpinnerService]
+  providers: [FireBaseService,SpinnerService,UtilityService]
 })
 export class SharedModule { }

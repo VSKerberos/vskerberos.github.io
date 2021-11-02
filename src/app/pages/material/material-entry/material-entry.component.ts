@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FireBaseService } from 'src/app/core/services/fire-base.service';
-import { MatFormFieldControl } from '@angular/material/form-field';
 import { ICategory } from 'src/app/core/core/models/category';
 import { ErrorStateMatcher } from '@angular/material/core';
 import {IMaterial} from '../../../core/core/models/material'

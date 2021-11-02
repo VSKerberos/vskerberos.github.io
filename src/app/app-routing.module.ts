@@ -22,6 +22,10 @@ const routes: Routes = [
   loadChildren:()=> import('./pages/category/category.module').then(mod=>mod.CategoryModule)
 },
 {
+  path:'product',
+  loadChildren:()=> import('./pages/products/product.module').then(mod=>mod.ProductModule)
+},
+{
     path: '**',
     redirectTo: 'dashboard',
     pathMatch: 'full'

@@ -1,0 +1,101 @@
+<div fxfill="row" fxlayout="column" style="height: 100%; min-height: 100%; min-width: 100%; width: 100%; flex-direction: column; box-sizing: border-box; display: flex;">
+
+
+    <!--sdsd-->
+
+
+
+    <form [formGroup]="productForm" (ngSubmit)=" productForm.valid && submitForm()" autocomplete="off">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>
+                    Ürün Tanımlama
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="row">
+                    <div>
+                        <app-text-input [formControl]='productForm.controls["name"]' [label]='"ürün adı"' [error]="'Lütfen ürün adı giriniz'" [minlength]='"3"' [maxlength]='"40"'></app-text-input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <app-text-input [formControl]='productForm.controls["code"]' [label]='"ürün kodu"' [error]="'Lütfen ürün kodunu giriniz'" [maxlength]='"40"'></app-text-input>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Kayıt Tarihi</mat-label>
+                        <input formControlName="operationdate" matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+
+
+
+                </div>
+
+
+
+
+            </mat-card-content>
+            <mat-card-actions>
+                <!-- <button color="primary" [disabled]='!productForm.valid' mat-raised-button>
+                                Kaydet 
+                            </button>
+
+                <button color="secondary" (click)="cancel()" mat-raised-button>
+                                Temizle
+                            </button> -->
+
+            </mat-card-actions>
+
+        </mat-card>
+    </form>
+
+
+
+    <app-product-material></app-product-material>
+
+
+
+    <div class="container" *ngIf="materialArr.length>0">
+        <table class="responsive-table">
+            <caption>Ürüne ait malzemeler</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Malzeme Adı</th>
+                    <th scope="col">Birim</th>
+                    <th scope="col">Birim Fiyat</th>
+                    <th scope="col">Miktarı</th>
+                    <th scope="col">Açıklama</th>
+                    <th scope="col">Toplam</th>
+
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <td colspan="5"></td>
+                    <td style="text-align: right;">Toplam Tutar: {{this.sum}} </td>
+                </tr>
+            </tfoot>
+            <tbody>
+                <tr *ngFor="let mat of materialArr">
+                    <th scope="row">{{mat.materialname}}</th>
+                    <td data-title="Released">{{mat.unit}}</td>
+                    <td data-title="Studio">{{mat.unitprice}}</td>
+                    <td data-title="Released">{{mat.quantity}}</td>
+                    <td data-title="Domestic Gross" data-type="currency">{{mat.remarks}}</td>
+                    <td data-title="International Gross" data-type="currency">{{mat.total}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+
+</div>

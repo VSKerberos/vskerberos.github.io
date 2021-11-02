@@ -76,8 +76,15 @@
     <ng-container matColumnDef="demo-actions">
         <th mat-header-cell *matHeaderCellDef> İşlem Bölümü</th>
         <md-cell *matCellDef="let element">
-            <button mat-raised-button color="primary" (click)="updateRecord(element)"> <mat-icon>build</mat-icon> Güncelle</button> &nbsp;
-            <button mat-raised-button color="warn" (click)="deleteRecord(element.id)">   <mat-icon>delete_outline</mat-icon> Sil</button>
+
+            <button mat-icon-button color="primary" matTooltip="Güncelle" matTooltipPosition="above" (click)="updateRecord(element)" aria-label="Example icon button with a home icon">
+                <mat-icon>edit</mat-icon>
+            </button>
+
+            <button mat-icon-button color="warn" matTooltip="Sil" matTooltipPosition="above" (click)="deleteRecord(element.id)" aria-label="Example icon button with a home icon">
+                <mat-icon>delete_outline</mat-icon>
+            </button>
+
 
 
         </md-cell>

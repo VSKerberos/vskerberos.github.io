@@ -13,6 +13,8 @@ export class TextInputComponent implements ControlValueAccessor {
 @Input() error:string;
 @Input() minlength:string;
 @Input() maxlength:string;
+@Input() appearence:string='';
+
 
 constructor(@Self() public ngControl: NgControl) { 
   this.ngControl.valueAccessor = this;

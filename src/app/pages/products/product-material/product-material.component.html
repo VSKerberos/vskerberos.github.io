@@ -1,0 +1,61 @@
+<div class="cover"></div>
+<form class="example-form" [formGroup]="productMatForm" (ngSubmit)=" productMatForm.valid && submitForm()">
+    <mat-grid-list cols="5" rowHeight="3:1">
+        <mat-grid-tile colspan='2' rowspan='1'>
+
+            <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                <mat-label>Malzeme adı</mat-label>
+                <input type="text" placeholder="Malzeme adı giriniz" aria-label="Text" matInput [formControl]="myControl" [matAutocomplete]="auto">
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onSelectionChanged($event)" [displayWith]="displayFn.bind(this)">
+                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                        {{option.name}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="outline">
+                <mat-label>Birim Fiyat</mat-label>
+                <input matInput disabled='true' formControlName="unitprice">
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <mat-form-field appearance="outline">
+                <mat-label>Kullanım Miktarı</mat-label>
+                <input matInput (input)="onSearchChange($event.target.value)" formControlName="quantity" type="number">
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Toplam</mat-label>
+                <input matInput formControlName="total">
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan='2' style="width: -webkit-fill-available;">
+
+            <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                <mat-label>Açıklama</mat-label>
+                <textarea cols="2" matInput formControlName="remarks"></textarea>
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Birim</mat-label>
+                <input matInput formControlName="unit">
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan='2'>
+
+            <button mat-mini-fab color="primary" (click)="submitForm()" aria-label="Example icon button with a menu icon">
+        <mat-icon>add</mat-icon>
+      </button>
+
+        </mat-grid-tile>
+    </mat-grid-list>
+</form>

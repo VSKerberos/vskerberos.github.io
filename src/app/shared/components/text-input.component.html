@@ -1,5 +1,5 @@
-<mat-form-field>
-    <input [class.is-invalid]='ngControl.touched && ngControl.invalid' matInput placeholder="{{label}}" [formControl]="ngControl.control" type={{type}}/>
+<mat-form-field appearance="{{appearence}}" [attr.disabled]="true">
+    <input [class.is-invalid]='ngControl.touched && ngControl.invalid' matInput placeholder="{{label}}" [formControl]="ngControl.control" type={{type}} />
     <mat-error *ngIf="ngControl.errors?.required">
         {{error}}
     </mat-error>
