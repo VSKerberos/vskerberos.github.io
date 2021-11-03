@@ -12,6 +12,8 @@ unit:string;
 materialname:string;
 unitprice:string;
 total:number;
+categoryid:string;
+categoryname:string;
 
 }
 

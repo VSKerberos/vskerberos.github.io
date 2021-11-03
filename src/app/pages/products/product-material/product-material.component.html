@@ -1,7 +1,25 @@
 <div class="cover"></div>
 <form class="example-form" [formGroup]="productMatForm" (ngSubmit)=" productMatForm.valid && submitForm()">
-    <mat-grid-list cols="5" rowHeight="3:1">
+
+
+
+    <mat-grid-list cols="7" rowHeight="3:1">
         <mat-grid-tile colspan='2' rowspan='1'>
+            <mat-form-field appearance="outline">
+                <mat-label>Grup Bilgisi</mat-label>
+                <input type="text" placeholder="Grup bilgisini giriniz" aria-label="Text" matInput [formControl]="groupControl" [matAutocomplete]="auto1">
+                <mat-autocomplete autoActiveFirstOption #auto1="matAutocomplete" (optionSelected)="onGroupSelectedChanged($event)" [displayWith]="displayGroupFn.bind(this)">
+                    <mat-option *ngFor="let category of categoryOptions | async" [value]="category">
+                        {{category.title}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+
+        </mat-grid-tile>
+
+        <mat-grid-tile colspan='2' rowspan='1'>
+
+
 
             <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                 <mat-label>Malzeme adı</mat-label>

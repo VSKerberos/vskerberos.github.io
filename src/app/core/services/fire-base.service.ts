@@ -60,29 +60,26 @@ export class FireBaseService {
           data.push({id,...local} as IMaterial);
         });
         this.subjectMaterial.next(data);
-      })
-  
+        localStorage.setItem('materials', JSON.stringify(data));
+      });
+      
       }
 
 
-    getCategories(){
+    async getCategories(){
 
-     return this.firestore.collection('category').ref.get().then((querySnapshot)=>{
-        const data: ICategory[] = [];
-        querySnapshot.forEach((doc)=> {
+     const querySnapshot = await this.firestore.collection('category').ref.get();
+      const data: ICategory[] = [];
+      querySnapshot.forEach((doc) => {
 
-           const local = doc.data() as ICategory;
-          const id = doc.id;
-          data.push({ id, ...local }  as ICategory);
+        const local = doc.data() as ICategory;
+        const id = doc.id;
+        data.push({ id, ...local } as ICategory);
 
-        });
-        this.subject.next(data);
-        localStorage.setItem('categories', JSON.stringify(data));
-      } )
+      });
+      this.subject.next(data);
+      localStorage.setItem('categories', JSON.stringify(data));
       
-        
-
-
 
 
       /*

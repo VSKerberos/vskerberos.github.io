@@ -66,6 +66,7 @@
             <caption>Ürüne ait malzemeler</caption>
             <thead>
                 <tr>
+                    <th scope="col">Grup Adı</th>
                     <th scope="col">Malzeme Adı</th>
                     <th scope="col">Birim</th>
                     <th scope="col">Birim Fiyat</th>
@@ -77,12 +78,13 @@
             </thead>
             <tfoot>
                 <tr>
-                    <td colspan="5"></td>
+                    <td colspan="6"></td>
                     <td style="text-align: right;">Toplam Tutar: {{this.sum}} </td>
                 </tr>
             </tfoot>
             <tbody>
                 <tr *ngFor="let mat of materialArr">
+                    <th scope="row">{{mat.categoryname}}</th>
                     <th scope="row">{{mat.materialname}}</th>
                     <td data-title="Released">{{mat.unit}}</td>
                     <td data-title="Studio">{{mat.unitprice}}</td>

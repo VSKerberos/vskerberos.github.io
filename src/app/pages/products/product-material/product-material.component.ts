@@ -8,6 +8,7 @@ import { FireBaseService } from 'src/app/core/services/fire-base.service';
 import { UtilityService } from 'src/app/core/services/utility.service';
 import {IProductMaterial} from 'src/app/core/core/models/product';
 import {ProductMaterialService} from 'src/app/core/services/product-material.service';
+import {ICategory} from 'src/app/core/core/models/category'
 
 @Component({
   selector: 'app-product-material',
@@ -16,13 +17,22 @@ import {ProductMaterialService} from 'src/app/core/services/product-material.ser
 })
 export class ProductMaterialComponent implements OnInit {
   myControl = new FormControl();
+  groupControl = new FormControl();
   options: string[] = ['One', 'Two', 'Three'];
   materials$: Observable<IMaterial[]>;
   filteredOptions: Observable<IMaterial[]>;
   materialArr:IMaterial[];
+  materialArrStorage:IMaterial[];
   selectedMaterial:IMaterial;
   productMatForm: FormGroup;
   currentitem:IProductMaterial;
+
+  selectedCategory:ICategory;
+  category$: Observable<ICategory[]>;
+  categoryArr:ICategory[];
+  categoryOptions:Observable<ICategory[]>;
+
+
   constructor(    private firebaseService: FireBaseService,
                   public fb: FormBuilder,
                   private utility:UtilityService,
@@ -31,7 +41,18 @@ export class ProductMaterialComponent implements OnInit {
   ngOnInit(): void {
     this.reactiveForm();
     this.getItems();
+     this.getCategories();
+
+    this.categoryOptions = this.groupControl.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filterGroup(value as string))
+    );
+
+    this.searchMaterialOptions();
     
+  }
+
+  searchMaterialOptions(){
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value as string))
@@ -41,7 +62,11 @@ export class ProductMaterialComponent implements OnInit {
   private _filter(value: string): IMaterial[] {
     const filterValue = String(value).toLowerCase(); 
 
-    return this.materialArr.filter(option => option.name.toUpperCase().startsWith(filterValue));
+    if(this.materialArr)
+    return this.materialArr.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
+    else return undefined;
+
+  
   }
 
   onSelectionChanged(event: MatAutocompleteSelectedEvent) {
@@ -53,23 +78,47 @@ export class ProductMaterialComponent implements OnInit {
     
   }
 
+  private _filterGroup(value:string):ICategory[]{
+    const filterValue = String(value).toLowerCase();
+
+    return this.categoryArr.filter(option=> option.title.toLowerCase().indexOf(filterValue) === 0);
+
+  }
+
+  onGroupSelectedChanged(event:MatAutocompleteSelectedEvent){
+    this.selectedCategory = event.option.value;
+    console.log('selectedcategory:'+this.selectedCategory.id+this.selectedCategory.categoryid);
+    this.getItemsByCategoryId(this.selectedCategory.categoryid);
+    this.searchMaterialOptions();
+  }
+
   displayFn(value?: any) {
     return value ? value.name : undefined;
   }
-
+  
+  displayGroupFn(value?:any) {
+    return value ? value.title : undefined;
+  }
 
   
   getItems(){
     this.firebaseService.getMaterialsObservable();
-    this.materials$ = this.firebaseService.materials$;
- //   this.dataSource = this.materials$;
-    
-    //this.dataSource = this.materialArr;
+    this.materialArrStorage = JSON.parse(localStorage.getItem('materials')) as IMaterial[];
+  }
 
-    
-    this.materials$.subscribe((categories)=> {
-      this.materialArr = categories as IMaterial[]
-  });
+  getItemsByCategoryId(categoryId:number){
+    this.materialArrStorage = JSON.parse(localStorage.getItem('materials')) as IMaterial[];
+    this.materialArr=this.materialArrStorage.filter(x=>x.groupcode == categoryId);
+  }
+
+  getCategories(){
+    this.firebaseService.getCategories();
+    this.category$ = this.firebaseService.categories$;
+
+    this.category$.subscribe((categories)=>{
+      this.categoryArr = categories as ICategory[]
+    });
+
   }
   reactiveForm() {
     this.productMatForm = this.fb.group({
@@ -103,7 +152,9 @@ this.productMatForm.patchValue({total  :  calculatedTotal});
       materialid : this.selectedMaterial.id,
       total : this.productMatForm.get('total').value,
       unitprice : this.selectedMaterial.price,
-      materialname: this.selectedMaterial.name
+      materialname: this.selectedMaterial.name,
+      categoryid : this.selectedCategory.id,
+      categoryname :this.selectedCategory.title
     }
 
     this.materialService.addMaterialToProduct(this.currentitem);
@@ -111,6 +162,7 @@ this.productMatForm.patchValue({total  :  calculatedTotal});
     this.productMatForm.markAsPristine();
     this.productMatForm.markAsUntouched();
     this.myControl.setValue('');
+    this.groupControl.setValue('');
   }
   
 
