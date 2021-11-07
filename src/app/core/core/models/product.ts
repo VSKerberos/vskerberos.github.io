@@ -1,6 +1,10 @@
 
 export interface IProduct{
 
+    id?:string;
+    name:string;
+    code:string;
+    operationDate:string;
 }
 
 export interface IProductMaterial{
@@ -14,7 +18,11 @@ unitprice:string;
 total:number;
 categoryid:string;
 categoryname:string;
+}
 
+export interface IProductMat {
+
+    productMaterial:IProductMaterial[]
 }
 
 export * from './product';

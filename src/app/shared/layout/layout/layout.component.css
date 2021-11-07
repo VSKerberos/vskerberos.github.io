@@ -39,6 +39,10 @@
     flex: 1 0 auto;
 }
 
+.navbar-sidenav-container a {
+    cursor: pointer;
+}
+
 
 /*Set sidenav width*/
 

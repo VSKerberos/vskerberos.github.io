@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/internal/operators';
 import {ICategory} from '../core/models/category'
 import {IMaterial} from '../core/models/material'
+import { IProduct, IProductMat } from '../core/models/product';
 
 
 @Injectable({
@@ -21,6 +22,12 @@ export class FireBaseService {
 
     private subjectMaterial = new BehaviorSubject<IMaterial[]>([]);
     materials$ : Observable<IMaterial[]> = this.subjectMaterial.asObservable();
+
+    private subjectProduct = new BehaviorSubject<IProduct[]>([]);
+    products$ :Observable<IProduct[]> = this.subjectProduct.asObservable();
+
+    public NewProductId: string;
+    
 
   getMaterialsByObject(){
     return this.firestore.collection('material').ref.get()
@@ -65,6 +72,22 @@ export class FireBaseService {
       
       }
 
+      deleteProduct(data)
+      {
+        return this.firestore.collection("productmaterial").doc(data).delete();
+      }
+
+
+      async getProducts(){
+        const querySnapshot = await this.firestore.collection('product').ref.get();
+        const data: IProduct[]  =[];
+        querySnapshot.forEach((doc)=>{
+          const local = doc.data() as IProduct;
+          const id = doc.id;
+          data.push({id,...local} as IProduct);
+        });
+        this.subjectProduct.next(data);
+      }
 
     async getCategories(){
 
@@ -199,6 +222,31 @@ fetchMechanics() {
   getMaterialsWitId(){
     
 
+  }
+
+  addProduct(mainproduct,productrelation:IProductMat){
+    return this.firestore.collection('product').add(mainproduct).then(response =>{
+      this.NewProductId = response.id;
+      console.log('added product id:'+this.NewProductId);
+
+      // this.firestore.collection('productmaterials').add(productrelation).then(resp=>{
+      //   console.log('addedd product materialid :'+resp.id);
+      // }).catch(err=>{ console.log(err)})
+      this.firestore.collection("productmaterial").doc(this.NewProductId).set(productrelation).then(resp=>{
+        console.log('addedd product materialid :'+resp);
+      }).catch(err=>{ console.log(err)})
+
+
+    }).catch(error=>{
+      console.log("add item error:"+error)
+    });
+
+  }
+
+  getbyfield()
+  {
+    //return  this.firestore.doc('material/' + id).get()
+ 
   }
 }
 

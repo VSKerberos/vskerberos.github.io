@@ -73,6 +73,8 @@
                     <th scope="col">Miktarı</th>
                     <th scope="col">Açıklama</th>
                     <th scope="col">Toplam</th>
+                    <th scope="col"></th>
+
 
                 </tr>
             </thead>
@@ -91,9 +93,17 @@
                     <td data-title="Released">{{mat.quantity}}</td>
                     <td data-title="Domestic Gross" data-type="currency">{{mat.remarks}}</td>
                     <td data-title="International Gross" data-type="currency">{{mat.total}}</td>
+                    <td data-title="Operation"><button mat-icon-button aria-label="Example icon-button with a heart icon" matTooltip="Sil" (click)="deleteRecord(mat)">
+                        <mat-icon>delete_outline</mat-icon>
+                      </button> </td>
                 </tr>
             </tbody>
         </table>
+        <div>
+            <button color="primary" *ngIf="materialArr.length>0" mat-raised-button (click)="saveproduct()">
+                Ürünü Kaydet 
+            </button>
+        </div>
     </div>
 
 

@@ -2,15 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, pipe } from 'rxjs';
-import { map } from 'rxjs/internal/operators';
-import { IProductMaterial } from 'src/app/core/core/models/product';
+import { delay, map } from 'rxjs/internal/operators';
+import { IProduct, IProductMat, IProductMaterial } from 'src/app/core/core/models/product';
+import { FireBaseService } from 'src/app/core/services/fire-base.service';
 import { ProductMaterialService } from 'src/app/core/services/product-material.service';
-
-
-interface Transaction {
-  item: string;
-  cost: number;
-}
+import { SpinnerService } from 'src/app/core/spinner.service';
 
 
 @Component({
@@ -27,8 +23,12 @@ export class ProductOperationComponent implements OnInit {
   materials$: Observable<IProductMaterial[]>;
   materialArr:IProductMaterial[] = [];
   displayedColumns: string[] = ['materialname', 'total'];
+  currentProduct:IProduct;
+  relationProduct:IProductMat;
   constructor( public fb: FormBuilder,
-    private materialService:ProductMaterialService) {
+    private materialService:ProductMaterialService,
+    private firebaseService:FireBaseService,
+    private spinnerService: SpinnerService,) {
       this.materialService.accessProductMaterials().subscribe(message=>{
         if(message){
           this.materialArr.push(message);
@@ -37,11 +37,6 @@ export class ProductOperationComponent implements OnInit {
       })
 
      }
-
-
-
-
- 
 
   setStep(index: number) {
     this.step = index;
@@ -68,9 +63,7 @@ export class ProductOperationComponent implements OnInit {
   }
 
   submitForm(){
-
-    
-    
+ 
   }
 
   cancel() {
@@ -91,10 +84,50 @@ export class ProductOperationComponent implements OnInit {
       name: ['',[Validators.required,Validators.minLength(3),Validators.maxLength(50)]],
       code: ['',Validators.required],
       operationdate:[Date,Validators.required]
-      
     });
+  }
+  deleteRecord(mat:IProductMaterial){
+console.log('deleted record: '+ mat.materialname);
 
-  
+const index = this.materialArr.indexOf(mat, 0);
+if (index > -1) {
+   this.materialArr.splice(index, 1);
+}
+
+  }
+
+  saveproduct(){
+  //   this.spinnerService.display(true);
+  //   this.getRelationProduct();
+  // this.getMainProductInfo();
+  // var resp =this.firebaseService.addProduct(this.currentProduct,this.relationProduct);
+  // this.spinnerService.display(false);
+  this.clearForm();
+
+  }
+
+  getMainProductInfo(){
+    let currentdate = this.productForm.get('operationdate').value as Date;
+    const stringDate: string = `${currentdate.getDate()}/${currentdate.getMonth()+1}/${currentdate.getFullYear()}`;
+
+    this.currentProduct= {
+      name : this.productForm.get('name').value ,
+      code: this.productForm.get('code').value,
+      operationDate:stringDate
+    }
+  }
+
+  getRelationProduct(){
+    this.relationProduct = {
+     productMaterial:this.materialArr
+    }
+  }
+
+  clearForm(){
+    this.productForm.reset();
+    this.productForm.markAsPristine();
+    this.productForm.markAsUntouched();
+    this.materialArr = [];
   }
 
 }
