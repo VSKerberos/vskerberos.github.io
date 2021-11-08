@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, pipe } from 'rxjs';
-import { delay, map } from 'rxjs/internal/operators';
 import { IProduct, IProductMat, IProductMaterial } from 'src/app/core/core/models/product';
 import { FireBaseService } from 'src/app/core/services/fire-base.service';
 import { ProductMaterialService } from 'src/app/core/services/product-material.service';
@@ -97,11 +96,11 @@ if (index > -1) {
   }
 
   saveproduct(){
-  //   this.spinnerService.display(true);
-  //   this.getRelationProduct();
-  // this.getMainProductInfo();
-  // var resp =this.firebaseService.addProduct(this.currentProduct,this.relationProduct);
-  // this.spinnerService.display(false);
+    this.spinnerService.display(true);
+    this.getRelationProduct();
+  this.getMainProductInfo();
+  var resp =this.firebaseService.addProduct(this.currentProduct,this.relationProduct);
+  this.spinnerService.display(false);
   this.clearForm();
 
   }
