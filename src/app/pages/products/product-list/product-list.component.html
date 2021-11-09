@@ -37,6 +37,9 @@
             <!-- <button mat-icon-button color="primary" matTooltip="Güncelle" matTooltipPosition="above" (click)="updateRecord(element)" aria-label="Example icon button with a home icon">
                 <mat-icon>edit</mat-icon>
             </button> -->
+            <button mat-icon-button color="warn" matTooltip="Sil" matTooltipPosition="above" (click)="deleteRecord(element.id)" aria-label="Example icon button with a home icon">
+                <mat-icon>delete_outline</mat-icon>
+            </button>
 
         </md-cell>
     </ng-container>

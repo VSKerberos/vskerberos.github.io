@@ -74,7 +74,14 @@ export class FireBaseService {
 
       deleteProduct(data)
       {
-        return this.firestore.collection("productmaterial").doc(data).delete();
+       // return this.firestore.collection("productmaterial").doc(data).delete();
+       this.firestore.doc(`productmaterial/${data}`).delete()
+       .catch(error => {console.log(error); })
+       .then(() =>{
+         this.firestore.doc(`product/${data}`).delete()
+         .catch(secerr=> {console.log(secerr);})
+         .then(()=>console.log(`Deleting question (${data})`))
+       });
       }
 
 

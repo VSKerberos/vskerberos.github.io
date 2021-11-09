@@ -24,6 +24,8 @@ export class ProductOperationComponent implements OnInit {
   displayedColumns: string[] = ['materialname', 'total'];
   currentProduct:IProduct;
   relationProduct:IProductMat;
+  productSaveMessage:string='Ürün Başarı ile kaydedildi.';
+
   constructor( public fb: FormBuilder,
     private materialService:ProductMaterialService,
     private firebaseService:FireBaseService,
@@ -102,6 +104,7 @@ if (index > -1) {
   var resp =this.firebaseService.addProduct(this.currentProduct,this.relationProduct);
   this.spinnerService.display(false);
   this.clearForm();
+  this.spinnerService.sendClickEvent(this.productSaveMessage);
 
   }
 
