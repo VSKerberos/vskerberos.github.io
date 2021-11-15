@@ -6,6 +6,7 @@ import { IProduct, IProductMat, IProductMaterial } from 'src/app/core/core/model
 import { FireBaseService } from 'src/app/core/services/fire-base.service';
 import { ProductMaterialService } from 'src/app/core/services/product-material.service';
 import { SpinnerService } from 'src/app/core/spinner.service';
+import * as math from 'mathjs';
 
 
 @Component({
@@ -32,8 +33,9 @@ export class ProductOperationComponent implements OnInit {
     private spinnerService: SpinnerService,) {
       this.materialService.accessProductMaterials().subscribe(message=>{
         if(message){
-          this.materialArr.push(message);
-          this.sum+=message.total;
+          this.materialArr.push(message); 
+          let c = message.total as number;
+          this.sum= math.evaluate(this.sum + message.total)  
         }
       })
 
@@ -90,11 +92,13 @@ export class ProductOperationComponent implements OnInit {
   deleteRecord(mat:IProductMaterial){
 console.log('deleted record: '+ mat.materialname);
 
+
+
 const index = this.materialArr.indexOf(mat, 0);
 if (index > -1) {
    this.materialArr.splice(index, 1);
 }
-
+this.sum = this.getTotalCost();
   }
 
   saveproduct(){

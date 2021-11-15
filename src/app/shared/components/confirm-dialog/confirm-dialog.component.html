@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+    {{data.message}}
+</div>
+<div style="float:right;margin:20px;">
+    <input style="margin:0px 10px;" type="button" value="Sil" [mat-dialog-close]="true" color="primary" mat-raised-button>
+    <input type="button" value="İptal" [mat-dialog-close]="false" color="secondary" mat-raised-button>
+
+</div>

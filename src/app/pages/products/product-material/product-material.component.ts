@@ -8,7 +8,8 @@ import { FireBaseService } from 'src/app/core/services/fire-base.service';
 import { UtilityService } from 'src/app/core/services/utility.service';
 import {IProductMaterial} from 'src/app/core/core/models/product';
 import {ProductMaterialService} from 'src/app/core/services/product-material.service';
-import {ICategory} from 'src/app/core/core/models/category'
+import {ICategory} from 'src/app/core/core/models/category';
+import * as math from 'mathjs';
 
 @Component({
   selector: 'app-product-material',
@@ -72,9 +73,10 @@ export class ProductMaterialComponent implements OnInit {
   onSelectionChanged(event: MatAutocompleteSelectedEvent) {
     
   this.selectedMaterial  = event.option.value;
-    console.log('@@'+ this.selectedMaterial.name + this.selectedMaterial.price );
-
+    console.log('@@'+ this.selectedMaterial.operationdate );
+    
     this.productMatForm.patchValue({unitprice:  this.selectedMaterial.price });
+    this.productMatForm.patchValue({unitpricedate:this.selectedMaterial.operationdate });
     
   }
 
@@ -125,6 +127,7 @@ export class ProductMaterialComponent implements OnInit {
       name: ['',[Validators.required,Validators.minLength(3),Validators.maxLength(50)]],
       unitprice: ['',Validators.required],
       total: ['',Validators.required],      
+      unitpricedate: [''],
       remarks: ['',Validators.required],
       unit:['',Validators.required],
       quantity:['',Validators.required]
@@ -132,14 +135,15 @@ export class ProductMaterialComponent implements OnInit {
     });
     this.productMatForm.controls['unitprice'].disable();
     this.productMatForm.controls['total'].disable();
+    this.productMatForm.controls['unitpricedate'].disable();
+
 
     
 
   }
   onSearchChange(searchValue: number): void {  
-    console.log('search:'+searchValue);
-    console.log('Number(this.selectedMaterial.price):'+Number(this.utility.replaceCommaToDot(this.selectedMaterial.price)));
-let calculatedTotal = Number(this.utility.replaceCommaToDot(this.selectedMaterial.price)) * searchValue;
+    
+let calculatedTotal = math.round(math.multiply(Number(this.utility.replaceCommaToDot(this.selectedMaterial.price)),searchValue),3);
 this.productMatForm.patchValue({total  :  calculatedTotal});
 
   }

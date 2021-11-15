@@ -26,6 +26,7 @@
     "@ngrx/store": "^12.5.1",
     "@ngrx/store-devtools": "^12.5.1",
     "firebase": "^9.0.2",
+    "mathjs": "^10.0.0",
     "ngx-currency": "^2.5.3",
     "rxfire": "^6.0.0",
     "rxjs": "~6.6.0",

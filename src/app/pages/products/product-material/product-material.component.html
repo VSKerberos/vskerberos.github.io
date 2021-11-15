@@ -51,6 +51,13 @@
         </mat-grid-tile>
         <mat-grid-tile>
             <mat-form-field appearance="outline">
+                <mat-label>Fiyat Tarihi</mat-label>
+                <input matInput disabled='true' formControlName="unitpricedate">
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+            <mat-form-field appearance="outline">
                 <mat-label>Kullanım Miktarı</mat-label>
                 <input matInput (input)="onSearchChange($event.target.value)" formControlName="quantity" type="number">
             </mat-form-field>
@@ -63,7 +70,7 @@
             </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile colspan='2' style="width: -webkit-fill-available;">
+        <mat-grid-tile style="width: -webkit-fill-available;">
 
             <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                 <mat-label>Açıklama</mat-label>

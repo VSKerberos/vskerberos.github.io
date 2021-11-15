@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/internal/operators';
 import {ICategory} from '../core/models/category'
 import {IMaterial} from '../core/models/material'
-import { IProduct, IProductMat } from '../core/models/product';
+import { IProduct, IProductMat, IProductMaterial } from '../core/models/product';
 
 
 @Injectable({
@@ -26,8 +26,16 @@ export class FireBaseService {
     private subjectProduct = new BehaviorSubject<IProduct[]>([]);
     products$ :Observable<IProduct[]> = this.subjectProduct.asObservable();
 
+    private subjectProductMaterial = new BehaviorSubject<IProductMaterial[]>([]);
+    materialproduct$: Observable<IProductMaterial[]> = this.subjectProductMaterial.asObservable();
+
     public NewProductId: string;
-    
+
+    private dataStore: { todos: IProductMaterial[] } = { todos: [] };
+    private _todos = new BehaviorSubject<IProductMaterial[]>([]);
+    readonly todos = this._todos.asObservable();
+
+    localdata: IProductMaterial[]  =[];
 
   getMaterialsByObject(){
     return this.firestore.collection('material').ref.get()
@@ -82,6 +90,60 @@ export class FireBaseService {
          .catch(secerr=> {console.log(secerr);})
          .then(()=>console.log(`Deleting question (${data})`))
        });
+      }
+
+        getProductDetail(data) {
+        
+        let local :IProductMaterial[];
+        this.localdata=[];
+       return this.firestore.collection('productmaterial').doc(data).ref.get().then((doc)=>{
+          if(doc.exists){
+            local= doc.data()["productMaterial"] as IProductMaterial[];
+            local.forEach((elem)=>{
+              this.localdata.push(elem);
+                console.log('each item: '+elem.materialname);
+            });
+            console.log(`local data is: ${local}`);
+          }
+        });
+       //this.subjectProductMaterial.next(localdata);
+       
+       
+
+
+       /*
+ const local = doc.data() as IProduct;
+          const id = doc.id;
+          data.push({id,...local} as IProduct);
+
+       */
+
+  //      this.firestore  doc.data() ["productMaterial"]
+  // .collection("productmaterial", (ref) => ref.where("id", "==", data))
+  // .snapshotChanges()
+  // .subscribe((data) => {
+  //   const myArray = [];
+  //   data.forEach((doc) => {
+  //     const y = doc.payload.doc.data()["altUID"];
+  //     console.log(y);
+  //     myArray.push(y);
+  //   });
+  //   console.log(myArray);
+  // });
+
+       /*
+return this.firestore.collection('material').ref.get().then((querySnapshot)=>{
+        const data: IMaterial[] =[];
+        querySnapshot.forEach((doc)=> {
+          const local = doc.data() as IMaterial;
+          const id = doc.id;
+          data.push({id,...local} as IMaterial);
+        });
+        this.subjectMaterial.next(data);
+        localStorage.setItem('materials', JSON.stringify(data));
+      });
+       */
+    
       }
 
 

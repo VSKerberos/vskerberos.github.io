@@ -25,8 +25,6 @@ export class MaterialComponent implements OnInit {
   materialArr:IMaterial[];
   private lessonListSubject = new Observable<IMaterial[]>();
   
-  @Output()
-  courseChanged = new EventEmitter();
   
   constructor(
     private firebaseService: FireBaseService, 
@@ -104,7 +102,7 @@ sortByGroupCode(a,b) {
 
     this.dialog.open(MaterialEntryComponent, dialogConfig)
       .afterClosed()
-      .subscribe(() => this.courseChanged.emit());
+      .subscribe();
 
       var number = 1434.02;
       console.log(new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'TRY' }).format(number));
@@ -127,7 +125,7 @@ addMaterial(){
 
     this.dialog.open(MaterialEntryComponent, dialogConfig)
       .afterClosed()
-      .subscribe(() => this.courseChanged.emit()); 
+      .subscribe(); 
 
 
       this.dialog.afterAllClosed.subscribe(result => {
@@ -153,11 +151,6 @@ addMaterial(){
       console.log("yunus  "+this.firebaseService._mechanics);
 
       }
-
-     /*
-
-
-     */
 
 }
 

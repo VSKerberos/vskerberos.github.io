@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Observable, of, pipe } from 'rxjs';
 import { filter, map, max, mergeMap, scan, tap } from 'rxjs/internal/operators';
 import { ICategory } from 'src/app/core/core/models/category';
 import { FireBaseService } from 'src/app/core/services/fire-base.service';
+import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-category',
@@ -21,7 +23,8 @@ export class CategoryComponent implements OnInit {
   dataSource;
   result;
   constructor(    private firebaseService: FireBaseService,
-                public fb: FormBuilder) {
+                public fb: FormBuilder,
+                private dialog: MatDialog) {
     this.reactiveForm();
   }
 
@@ -102,9 +105,24 @@ this.firebaseService.updateCategory(this.localCategory,this.updatedRecord.id).ca
 
   deleteRecord(id: any){
     console.log('Deleted recor is: '+ id);
-    this.firebaseService.deleteCategorie(id);
-    this.mode ='create';
-    this.getItems();
+    const confirmDialog = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title:'Category Silme Doğrulama',
+        message:'Silmek istediğinizden emin misiniz?'
+      }
+    });
+
+    confirmDialog.afterClosed().subscribe(result =>{
+      if(result === true)
+      {
+      console.log('@@@@Silme işlemi Doğrulandı');
+      this.firebaseService.deleteCategorie(id);
+      this.mode ='create';   
+      this.getItems();
+      }
+    })
+
+ 
   }
 
   updateRecord(element:ICategory){

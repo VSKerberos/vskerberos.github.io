@@ -17,6 +17,7 @@ import { ProgressSpinnerComponent } from './components/progress-spinner/progress
 import {SpinnerService} from '../core/spinner.service';
 import {CategoryNamePipe} from './pipes/categorytext.pipe'
 import {UtilityService} from '../core/services/utility.service';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 
 
@@ -25,7 +26,8 @@ import {UtilityService} from '../core/services/utility.service';
     LayoutComponent,
     TextInputComponent,
     ProgressSpinnerComponent,
-    CategoryNamePipe
+    CategoryNamePipe,
+    ConfirmDialogComponent
   ],
   imports: [
     RouterModule,
@@ -51,7 +53,8 @@ import {UtilityService} from '../core/services/utility.service';
     FlexLayoutModule,
     TextInputComponent,
     ProgressSpinnerComponent,
-    CategoryNamePipe
+    CategoryNamePipe,
+    ConfirmDialogComponent
   ],
   providers: [FireBaseService,SpinnerService,UtilityService]
 })

@@ -14,6 +14,7 @@ quantity:string;
 remarks:string;
 unit:string;
 materialname:string;
+materialdate?:string;
 unitprice:string;
 total:number;
 categoryid:string;

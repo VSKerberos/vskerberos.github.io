@@ -1,0 +1,73 @@
+<mat-card class="example-card">
+    <mat-card-title>Ürün Adı: {{ this.selectedProduct.name}}
+    </mat-card-title>
+    <mat-card-subtitle>&hArr;&hArr;&hArr;&hArr;&hArr;&hArr;&hArr;&hArr;&hArr;&hArr;&hArr;</mat-card-subtitle>
+    <mat-card-title>Ürün Kodu: {{ this.selectedProduct.code}}
+    </mat-card-title>
+
+    <mat-card-title-group>
+        <p class="special-header">Total Price: {{this.totalCost}} </p>
+        <p class="special-header">Son Güncelleme Tarihi: {{this.selectedProduct.operationDate}} </p>
+    </mat-card-title-group>
+
+
+    <mat-card-content>
+        <p></p>
+
+        <div class="container" *ngIf="this.productDetail.length>0">
+            <table class="responsive-table">
+                <caption>Ürüne ait malzemeler</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Grup Adı</th>
+                        <th scope="col">Malzeme Adı</th>
+                        <th scope="col">Birim</th>
+                        <th scope="col">Birim Fiyat</th>
+                        <th scope="col">Mal Giriş Tarihi</th>
+                        <th scope="col">Miktarı</th>
+                        <th scope="col">Açıklama</th>
+                        <th scope="col">Toplam</th>
+
+
+
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td colspan="7"></td>
+                        <td style="text-align: right;">Toplam Tutar: {{this.totalCost}} </td>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <tr *ngFor="let mat of productDetail">
+                        <th scope="row">{{mat.categoryname}}</th>
+                        <th scope="row">{{mat.materialname}}</th>
+                        <td data-title="Released">{{mat.unit}}</td>
+                        <td data-title="Studio">{{mat.unitprice}}</td>
+                        <td data-title="Studio">{{mat.materialdate}}</td>
+                        <td data-title="Released">{{mat.quantity}}</td>
+                        <td data-title="Domestic Gross" data-type="currency">{{mat.remarks}}</td>
+                        <td data-title="International Gross" data-type="currency">{{mat.total}}</td>
+                        <!-- <td data-title="Operation"><button mat-icon-button aria-label="Example icon-button with a heart icon" matTooltip="Sil" (click)="deleteRecord(mat)">
+                            <mat-icon>delete_outline</mat-icon>
+                          </button> </td> -->
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+                <button color="primary" *ngIf="productDetail.length>0" mat-raised-button (click)="saveproduct()">
+                    Ürünü Kaydet 
+                </button>
+            </div>
+        </div>
+
+    </mat-card-content>
+    <mat-divider inset></mat-divider>
+    <mat-card-actions>
+        <button mat-button (click)="onClose()">Kapat</button>
+        <!-- <button mat-button>SHARE</button> -->
+    </mat-card-actions>
+    <mat-card-footer>
+        <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->
+    </mat-card-footer>
+</mat-card>

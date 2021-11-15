@@ -5,6 +5,7 @@ import { ProductRoutingModule } from './product-routing.module';
 import { ProductOperationComponent } from './product-operation/product-operation.component';
 import { ProductMaterialComponent } from './product-material/product-material.component';
 import { ProductListComponent } from './product-list/product-list.component';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
 
 
 
@@ -12,7 +13,8 @@ import { ProductListComponent } from './product-list/product-list.component';
   declarations: [
     ProductOperationComponent,
     ProductMaterialComponent,
-    ProductListComponent
+    ProductListComponent,
+    ProductDetailComponent
   ],
   imports: [
     CommonModule,
