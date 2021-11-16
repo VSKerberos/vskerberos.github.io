@@ -42,7 +42,7 @@ export class ProductDetailComponent implements OnInit {
 
     this.cloned.forEach(x=>{
       let currenmaterial =this.getMaterialItem(x.materialid);
-      x.materialdate= currenmaterial.operationdate;
+      x.materialdate= currenmaterial.operationdate ?? '';
       x.unitprice = currenmaterial.price;
       x.total= math.round(math.multiply(Number(this.utility.replaceCommaToDot(currenmaterial.price)) , Number(x.quantity)),2) ;
     })
