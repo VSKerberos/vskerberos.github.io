@@ -33,6 +33,7 @@ export class ProductListComponent implements OnInit {
 
 
   getItems(){
+    this.firebaseService.getMaterialsObservable();
     this.firebaseService.getProducts();
     this.products$ = this.firebaseService.products$;
    
@@ -67,6 +68,7 @@ export class ProductListComponent implements OnInit {
       .subscribe();
     });
   }
+  
 
   routeEdit(productId){
     const navigationExtras: NavigationExtras = {

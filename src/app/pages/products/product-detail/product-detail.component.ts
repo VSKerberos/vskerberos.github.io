@@ -53,7 +53,6 @@ export class ProductDetailComponent implements OnInit {
 
  
   getItems(){
-    this.firebaseService.getMaterialsObservable();
     this.materialArrStorage = JSON.parse(localStorage.getItem('materials')) as IMaterial[];
   }
 
