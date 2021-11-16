@@ -44,11 +44,11 @@ export class ProductListComponent implements OnInit {
   }
 
   deleteRecord(id: any){
-    console.log('Deleted recor is: '+ id);
-    //this.firebaseService.deleteCategorie(id);
-    // this.firebaseService.deleteProduct(id);
-    // this.getItems();
-    // this.spinner.sendClickEvent(this.deleteMessage);
+    //console.log('Deleted recor is: '+ id);
+    this.firebaseService.deleteCategorie(id);
+    this.firebaseService.deleteProduct(id);
+    this.getItems();
+    this.spinner.sendClickEvent(this.deleteMessage);
   }
 
   detail(item){

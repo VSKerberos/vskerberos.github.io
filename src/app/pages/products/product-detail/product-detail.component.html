@@ -55,8 +55,8 @@
                 </tbody>
             </table>
             <div>
-                <button color="primary" *ngIf="productDetail.length>0" mat-raised-button (click)="saveproduct()">
-                    Ürünü Kaydet 
+                <button color="primary" *ngIf="productDetail.length>0" mat-raised-button (click)="onClose()">
+                    Kapat 
                 </button>
             </div>
         </div>
@@ -64,7 +64,7 @@
     </mat-card-content>
     <mat-divider inset></mat-divider>
     <mat-card-actions>
-        <button mat-button (click)="onClose()">Kapat</button>
+        <!-- <button mat-button (click)="onClose()">Kapat</button> -->
         <!-- <button mat-button>SHARE</button> -->
     </mat-card-actions>
     <mat-card-footer>
