@@ -7,6 +7,8 @@ import { FireBaseService } from 'src/app/core/services/fire-base.service';
 import { ProductMaterialService } from 'src/app/core/services/product-material.service';
 import { SpinnerService } from 'src/app/core/spinner.service';
 import * as math from 'mathjs';
+import { Router } from '@angular/router';
+import { ThisReceiver } from '@angular/compiler';
 
 
 @Component({
@@ -26,11 +28,15 @@ export class ProductOperationComponent implements OnInit {
   currentProduct:IProduct;
   relationProduct:IProductMat;
   productSaveMessage:string='Ürün Başarı ile kaydedildi.';
+  mode: 'create' | 'update';
+  currentEditProductId:string;
 
   constructor( public fb: FormBuilder,
     private materialService:ProductMaterialService,
     private firebaseService:FireBaseService,
-    private spinnerService: SpinnerService,) {
+    private spinnerService: SpinnerService,
+    private router: Router) {
+      this.mode = 'create';
       this.materialService.accessProductMaterials().subscribe(message=>{
         if(message){
           this.materialArr.push(message); 
@@ -38,32 +44,26 @@ export class ProductOperationComponent implements OnInit {
           this.sum= math.evaluate(this.sum + message.total)  
         }
       })
-
+      const navigation = this.router.getCurrentNavigation();
+    const state = navigation.extras.state as {
+    mode: any,
+    productId: string
+      };
+      if(state){
+  this.mode = state.mode;
+  this.currentEditProductId = state.productId;
+  console.log(`routerlink geldi haydi ${ this.mode }` ); 
+      } else {
+        console.log(`routerlinksiz geldi ${this.mode}` ); 
+      }
+      
+      
      }
 
-  setStep(index: number) {
-    this.step = index;
-  }
-
-  nextStep() {
-    this.step++;
-  }
-
-  prevStep() {
-    this.step--;
-  }
   
   ngOnInit(): void {
     this.reactiveForm();
-    // this.materials$ = this.materialService.accessProductMaterials();
-    // this.materials$.pipe(
-    //    map((things)=> {
-    //     this.dataSource.data = things,
-    //     this.materialArr = things as IProductMaterial[]
-    //    }));
-     
-   
-  }
+    }
 
   submitForm(){
  
@@ -88,6 +88,7 @@ export class ProductOperationComponent implements OnInit {
       code: ['',Validators.required],
       operationdate:[Date,Validators.required]
     });
+    
   }
   deleteRecord(mat:IProductMaterial){
 console.log('deleted record: '+ mat.materialname);

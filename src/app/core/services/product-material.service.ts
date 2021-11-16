@@ -27,6 +27,10 @@ private _todo = new BehaviorSubject<IProductMaterial[]>([]);
     //return this.todos$;
   }
 
+  destroyMaterialProduct(){
+    this.subject.unsubscribe();
+  }
+
   create(item: IProductMaterial) {
     this.todos.push(item);
     this._todo.next(Object.assign(item, this.todos));

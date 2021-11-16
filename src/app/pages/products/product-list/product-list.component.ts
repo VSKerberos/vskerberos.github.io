@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { NavigationExtras, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/internal/operators';
 import { IProduct } from 'src/app/core/core/models/product';
@@ -21,7 +22,8 @@ export class ProductListComponent implements OnInit {
   deleteMessage:string='Başarı ile silindi';
   constructor(private firebaseService: FireBaseService,
               private spinner:SpinnerService,
-              private dialog: MatDialog) { }
+              private dialog: MatDialog,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.getItems();
@@ -64,7 +66,15 @@ export class ProductListComponent implements OnInit {
       .afterClosed()
       .subscribe();
     });
+  }
 
-   
+  routeEdit(productId){
+    const navigationExtras: NavigationExtras = {
+      state: {
+        mode: 'update',
+        productId: productId
+        }
+    };
+    this.router.navigate(['product'], navigationExtras );
   }
 } 

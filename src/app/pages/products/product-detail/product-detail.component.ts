@@ -35,7 +35,6 @@ export class ProductDetailComponent implements OnInit {
     this.cloned=[];
     this.productDetail = [];
     this.getItems();
-    this.materialproduct$ = this.firebaseService.materialproduct$;
     this.cloned=[];
     this.productDetail = [];
     this.cloned = this.firebaseService.localdata.map(x => Object.assign({}, x));
@@ -54,14 +53,12 @@ export class ProductDetailComponent implements OnInit {
 
  
   getItems(){
-   // this.firebaseService.getMaterialsObservable();
+    this.firebaseService.getMaterialsObservable();
     this.materialArrStorage = JSON.parse(localStorage.getItem('materials')) as IMaterial[];
   }
 
   getTotalCost() {
- 
       return this.cloned ? this.cloned.map(t => t.total).reduce((acc, value) => acc + value, 0) : 0;
-  
     }
 
   getMaterialItem(id:any):IMaterial
