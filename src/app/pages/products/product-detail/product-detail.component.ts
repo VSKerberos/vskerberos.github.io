@@ -21,7 +21,7 @@ export class ProductDetailComponent implements OnInit {
   materialArrStorage:IMaterial[];
   cloned:IProductMaterial[] = [];
   materialproduct$: Observable<IProductMaterial[]>
-  totalCost:Number;
+  totalCost:string;
   constructor( private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) data,    private firebaseService: FireBaseService, 
     private spinnerService: SpinnerService,   
@@ -32,7 +32,6 @@ export class ProductDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cloned=[];
     this.productDetail = [];
     this.getItems();
     this.cloned=[];
@@ -46,7 +45,7 @@ export class ProductDetailComponent implements OnInit {
       x.total= math.round(math.multiply(Number(this.utility.replaceCommaToDot(currenmaterial.price)) , Number(x.quantity)),2) ;
     })
 
-    this.totalCost = this.getTotalCost();
+    this.totalCost = math.format(this.getTotalCost(), 5);  
     
     this.productDetail  =this.cloned;    
   }
@@ -60,6 +59,7 @@ export class ProductDetailComponent implements OnInit {
       return this.cloned ? this.cloned.map(t => t.total).reduce((acc, value) => acc + value, 0) : 0;
     }
 
+    // math.evaluate(this.sum + message.total) 
   getMaterialItem(id:any):IMaterial
   {
     return this.materialArrStorage.find(x=>x.id === id);

@@ -91,3 +91,8 @@
         </mat-grid-tile>
     </mat-grid-list>
 </form>
+<div class="row" *ngIf="this.mode=='create'">
+    <button color="secondary" (click)="onClose()" mat-raised-button>
+        Kapat
+    </button>
+</div>

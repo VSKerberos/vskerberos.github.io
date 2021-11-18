@@ -7,9 +7,6 @@ import { FireBaseService } from 'src/app/core/services/fire-base.service';
 import { ProductMaterialService } from 'src/app/core/services/product-material.service';
 import { SpinnerService } from 'src/app/core/spinner.service';
 import * as math from 'mathjs';
-import { Router } from '@angular/router';
-import { ThisReceiver } from '@angular/compiler';
-
 
 @Component({
   selector: 'app-product-operation',
@@ -34,8 +31,9 @@ export class ProductOperationComponent implements OnInit {
   constructor( public fb: FormBuilder,
     private materialService:ProductMaterialService,
     private firebaseService:FireBaseService,
-    private spinnerService: SpinnerService,
-    private router: Router) {
+    private spinnerService: SpinnerService
+    ) {
+      this.reactiveForm();
       this.mode = 'create';
       this.materialService.accessProductMaterials().subscribe(message=>{
         if(message){
@@ -44,25 +42,13 @@ export class ProductOperationComponent implements OnInit {
           this.sum= math.evaluate(this.sum + message.total)  
         }
       })
-      const navigation = this.router.getCurrentNavigation();
-    const state = navigation.extras.state as {
-    mode: any,
-    productId: string
-      };
-      if(state){
-  this.mode = state.mode;
-  this.currentEditProductId = state.productId;
-  console.log(`routerlink geldi haydi ${ this.mode }` ); 
-      } else {
-        console.log(`routerlinksiz geldi ${this.mode}` ); 
-      }
-      
+   
       
      }
 
   
   ngOnInit(): void {
-    this.reactiveForm();
+ 
     }
 
   submitForm(){

@@ -1,10 +1,5 @@
 <div fxfill="row" fxlayout="column" style="height: 100%; min-height: 100%; min-width: 100%; width: 100%; flex-direction: column; box-sizing: border-box; display: flex;">
 
-
-    <!--sdsd-->
-
-
-
     <form [formGroup]="productForm" (ngSubmit)=" productForm.valid && submitForm()" autocomplete="off">
         <mat-card>
             <mat-card-header>
@@ -32,24 +27,9 @@
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
-
-
-
                 </div>
-
-
-
-
             </mat-card-content>
             <mat-card-actions>
-                <!-- <button color="primary" [disabled]='!productForm.valid' mat-raised-button>
-                                Kaydet 
-                            </button>
-
-                <button color="secondary" (click)="cancel()" mat-raised-button>
-                                Temizle
-                            </button> -->
-
             </mat-card-actions>
 
         </mat-card>

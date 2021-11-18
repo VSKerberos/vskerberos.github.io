@@ -43,15 +43,10 @@ export class FireBaseService {
       const data: IMaterial[] = [];
       querySnapshot.forEach((doc)=>{
         data.push(doc.data() as IMaterial );
-        console.log(doc.id, " => ", doc.data());
         let d = doc.data() as IMaterial;
-        console.log(d.name);
-        
       })
-      //this._mechanics.next(data);
+      
     });
-      
-      
       
   }
 
@@ -82,7 +77,6 @@ export class FireBaseService {
 
       deleteProduct(data)
       {
-       // return this.firestore.collection("productmaterial").doc(data).delete();
        this.firestore.doc(`productmaterial/${data}`).delete()
        .catch(error => {console.log(error); })
        .then(() =>{
@@ -92,6 +86,15 @@ export class FireBaseService {
        });
       }
 
+      updateProductMaterial(data:IProductMat,id:any){
+
+         return this.firestore.doc(`productmaterial/${id}`).update(data);
+      }
+
+      updateProduct(data:IProduct,id:any) {
+      return  this.firestore.doc('product/' + id).update(data);
+     }
+
         getProductDetail(data) {
         
         let local :IProductMaterial[];
@@ -99,14 +102,20 @@ export class FireBaseService {
        return this.firestore.collection('productmaterial').doc(data).ref.get().then((doc)=>{
           if(doc.exists){
             local= doc.data()["productMaterial"] as IProductMaterial[];
+            
             local.forEach((elem)=>{
+              console.log('element id:=>'+elem.id);
               this.localdata.push(elem);
-                console.log('each item: '+elem.materialname);
             });
-            console.log(`local data is: ${local}`);
           }
         });
-       //this.subjectProductMaterial.next(localdata);
+       
+
+        /*
+     const local = doc.data() as IMaterial;
+          const id = doc.id;
+          data.push({id,...local} as IMaterial);
+        */
        
        
 
@@ -311,6 +320,7 @@ fetchMechanics() {
     });
 
   }
+
 
   getbyfield()
   {

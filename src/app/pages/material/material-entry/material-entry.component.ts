@@ -40,17 +40,8 @@ export class MaterialEntryComponent implements OnInit {
       if (this.mode == 'update') {
 
         this.reactiveForm();
-        console.log('@@@@@@:'+this.material.operationdate);
         
-        /*
-        this.materialForm.get("name").patchValue(data.material.payload.doc.data().name);
-        this.materialForm.get("name").setValue("1");
-        console.log(     this.materialForm.get("name"));
-        this.materialForm.controls.name.setValue(data.material.payload.doc.data().name);
-        this.materialForm.controls['name'].patchValue(data.material.payload.doc.data().name);
-        console.log("dasdasd:"+data.material.payload.doc.data().name);
-        
-        */
+
         this.materialForm.patchValue({name:  this.material.name});
         this.materialForm.patchValue({unit:  this.material.unit});
         this.materialForm.patchValue({price: data.material.price});

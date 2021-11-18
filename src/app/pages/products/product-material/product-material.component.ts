@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Observable } from 'rxjs';
@@ -10,6 +10,7 @@ import {IProductMaterial} from 'src/app/core/core/models/product';
 import {ProductMaterialService} from 'src/app/core/services/product-material.service';
 import {ICategory} from 'src/app/core/core/models/category';
 import * as math from 'mathjs';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-product-material',
@@ -27,7 +28,7 @@ export class ProductMaterialComponent implements OnInit {
   selectedMaterial:IMaterial;
   productMatForm: FormGroup;
   currentitem:IProductMaterial;
-
+  mode:string;
   selectedCategory:ICategory;
   category$: Observable<ICategory[]>;
   categoryArr:ICategory[];
@@ -37,7 +38,11 @@ export class ProductMaterialComponent implements OnInit {
   constructor(    private firebaseService: FireBaseService,
                   public fb: FormBuilder,
                   private utility:UtilityService,
-                  private materialService:ProductMaterialService ) { }
+                  private materialService:ProductMaterialService,
+                  @Optional()  @Inject(MAT_DIALOG_DATA) data,
+                  @Optional() private dialogRef: MatDialogRef<ProductMaterialComponent> ) {
+                   this.mode= data ? data.mode : 'update';
+                   }
 
   ngOnInit(): void {
     this.reactiveForm();
@@ -167,6 +172,12 @@ this.productMatForm.patchValue({total  :  calculatedTotal});
     this.productMatForm.markAsUntouched();
     this.myControl.setValue('');
     this.groupControl.setValue('');
+  }
+
+  
+  onClose() {
+    this.productMatForm.reset();
+    this.dialogRef.close([]);
   }
   
 

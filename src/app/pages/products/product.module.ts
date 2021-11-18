@@ -6,6 +6,8 @@ import { ProductOperationComponent } from './product-operation/product-operation
 import { ProductMaterialComponent } from './product-material/product-material.component';
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { ProductUpdateComponent } from './product-update/product-update.component';
+
 
 
 
@@ -14,12 +16,15 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
     ProductOperationComponent,
     ProductMaterialComponent,
     ProductListComponent,
-    ProductDetailComponent
+    ProductDetailComponent,
+    ProductUpdateComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     ProductRoutingModule
+  
   ]
+
 })
 export class ProductModule { }

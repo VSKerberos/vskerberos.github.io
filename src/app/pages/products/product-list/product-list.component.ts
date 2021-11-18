@@ -70,13 +70,16 @@ export class ProductListComponent implements OnInit {
   }
   
 
-  routeEdit(productId){
+  routeEdit(product){
     const navigationExtras: NavigationExtras = {
       state: {
         mode: 'update',
-        productId: productId
+        product: product
         }
     };
-    this.router.navigate(['product'], navigationExtras );
+    this.firebaseService.getProductDetail(product.id).then(()=>{
+      this.router.navigate(['product/update'], navigationExtras );
+    });
+    
   }
 } 
