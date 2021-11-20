@@ -130,7 +130,7 @@ export class ProductMaterialComponent implements OnInit {
   reactiveForm() {
     this.productMatForm = this.fb.group({
       name: ['',[Validators.required,Validators.minLength(3),Validators.maxLength(50)]],
-      unitprice: ['',Validators.required],
+      unitprice: ['', Validators.required],
       total: ['',Validators.required],      
       unitpricedate: [''],
       remarks: ['',Validators.required],

@@ -13,10 +13,7 @@ export class DashboardHomeComponent implements OnInit {
 
   ngOnInit(): void {
     
-this.firebaseService.getCategories();
-    setTimeout(() => {
-      
-    });
-  }
 
+    
+  }
 }
