@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/internal/operators';
@@ -11,6 +11,7 @@ import {ProductMaterialService} from 'src/app/core/services/product-material.ser
 import {ICategory} from 'src/app/core/core/models/category';
 import * as math from 'mathjs';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SpinnerService } from 'src/app/core/spinner.service';
 
 @Component({
   selector: 'app-product-material',
@@ -20,7 +21,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class ProductMaterialComponent implements OnInit {
   myControl = new FormControl();
   groupControl = new FormControl();
-  options: string[] = ['One', 'Two', 'Three'];
   materials$: Observable<IMaterial[]>;
   filteredOptions: Observable<IMaterial[]>;
   materialArr:IMaterial[];
@@ -28,11 +28,13 @@ export class ProductMaterialComponent implements OnInit {
   selectedMaterial:IMaterial;
   productMatForm: FormGroup;
   currentitem:IProductMaterial;
-  mode:string;
   selectedCategory:ICategory;
   category$: Observable<ICategory[]>;
   categoryArr:ICategory[];
   categoryOptions:Observable<ICategory[]>;
+  productMissingMessage:string='Lütfen eksik alanarı doldurunuz.';
+  mode: 'create' | 'update';
+  
 
 
   constructor(    private firebaseService: FireBaseService,
@@ -40,8 +42,11 @@ export class ProductMaterialComponent implements OnInit {
                   private utility:UtilityService,
                   private materialService:ProductMaterialService,
                   @Optional()  @Inject(MAT_DIALOG_DATA) data,
-                  @Optional() private dialogRef: MatDialogRef<ProductMaterialComponent> ) {
-                   this.mode= data ? data.mode : 'update';
+                  @Optional() private dialogRef: MatDialogRef<ProductMaterialComponent>,
+                  private spinnerService:SpinnerService ) {
+                    this.mode = data ? data.mode : undefined;
+            
+            
                    }
 
   ngOnInit(): void {
@@ -55,6 +60,7 @@ export class ProductMaterialComponent implements OnInit {
     );
 
     this.searchMaterialOptions();
+
     
   }
 
@@ -69,7 +75,7 @@ export class ProductMaterialComponent implements OnInit {
     const filterValue = String(value).toLowerCase(); 
 
     if(this.materialArr)
-    return this.materialArr.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0);
+    return this.materialArr.filter(option => option.name.toLowerCase().indexOf(filterValue) === 0).sort((a, b) => (a.name < b.name ? -1 : 1));
     else return undefined;
 
   
@@ -116,6 +122,8 @@ export class ProductMaterialComponent implements OnInit {
   getItemsByCategoryId(categoryId:number){
     this.materialArrStorage = JSON.parse(localStorage.getItem('materials')) as IMaterial[];
     this.materialArr=this.materialArrStorage.filter(x=>x.groupcode == categoryId);
+    this.materialArr =    this.materialArr.sort((a, b) => (a.name < b.name ? -1 : 1));
+
   }
 
   getCategories(){
@@ -129,7 +137,7 @@ export class ProductMaterialComponent implements OnInit {
   }
   reactiveForm() {
     this.productMatForm = this.fb.group({
-      name: ['',[Validators.required,Validators.minLength(3),Validators.maxLength(50)]],
+      groupControl: ['',[Validators.required,Validators.minLength(3),Validators.maxLength(50)]],
       unitprice: ['', Validators.required],
       total: ['',Validators.required],      
       unitpricedate: [''],
@@ -154,6 +162,18 @@ this.productMatForm.patchValue({total  :  calculatedTotal});
   }
 
   submitForm(){
+    for (let el in this.productMatForm.controls) {
+      if (this.productMatForm.controls[el].errors) {
+        console.log(el)
+      }
+ }    
+    if(!this.productMatForm.valid){
+      this.spinnerService.sendClickEvent(this.productMissingMessage);
+      return;
+    }
+    
+
+
     this.currentitem= {
       quantity: this.productMatForm.get('quantity').value,
       remarks:this.productMatForm.get('remarks').value,
@@ -179,6 +199,8 @@ this.productMatForm.patchValue({total  :  calculatedTotal});
     this.productMatForm.reset();
     this.dialogRef.close([]);
   }
+
+ 
   
 
 }

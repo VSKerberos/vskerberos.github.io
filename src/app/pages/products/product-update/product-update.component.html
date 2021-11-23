@@ -22,7 +22,7 @@
 
                 <div class="row">
                     <mat-form-field appearance="outline">
-                        <mat-label>Kayıt Tarihi</mat-label>
+                        <mat-label>Güncellenme Tarihi</mat-label>
                         <input formControlName="operationdate" matInput [matDatepicker]="picker">
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
@@ -75,9 +75,19 @@
                             <td data-title="Released">{{mat.quantity}}</td>
                             <td data-title="Domestic Gross" data-type="currency">{{mat.remarks}}</td>
                             <td data-title="International Gross" data-type="currency">{{mat.total}}</td>
-                            <td data-title="Operation"><button mat-icon-button aria-label="Example icon-button with a heart icon" matTooltip="Sil" (click)="deleteRecord(mat)">
+                            <td data-title="Operation">
+                                <button mat-icon-button aria-label="Example icon-button with a heart icon" matTooltip="Sil" (click)="deleteRecord(mat)">
                                 <mat-icon>delete_outline</mat-icon>
-                              </button> </td>
+                                
+                            </button>
+
+                                <button mat-icon-button color="primary" matTooltip="Güncelle" matTooltipPosition="right" (click)="editMaterial(mat)" aria-label="Example icon button with a home icon">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+
+
+
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -95,3 +105,70 @@
     </form>
 
 </div>
+
+<ng-template #dialogTemplate let-item>
+    <form class="example-form">
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Company (disabled)</mat-label>
+            <input matInput disabled [(ngModel)]="item.categoryname" [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+
+        <table class="example-full-width" cellspacing="0">
+            <tr>
+                <td>
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Birim</mat-label>
+                        <input matInput [(ngModel)]="item.unit" [ngModelOptions]="{standalone: true}" (change)="unitUpdated($event)">
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Miktar</mat-label>
+                        <input matInput [(ngModel)]="item.quantity" [ngModelOptions]="{standalone: true}" (change)="quantityUpdated($event)">
+                    </mat-form-field>
+                </td>
+            </tr>
+        </table>
+
+        <p>
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Açıklama</mat-label>
+                <textarea matInput [(ngModel)]="item.remarks" [ngModelOptions]="{standalone: true}" (change)="remarksUpdated($event)"></textarea>
+            </mat-form-field>
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Address 2</mat-label>
+                <textarea matInput></textarea>
+            </mat-form-field>
+        </p>
+
+        <table class="example-full-width" cellspacing="0">
+            <tr>
+                <td>
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>City</mat-label>
+                        <input matInput placeholder="Ex. San Francisco">
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>State</mat-label>
+                        <input matInput placeholder="Ex. California">
+                    </mat-form-field>
+                </td>
+                <td>
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Postal Code</mat-label>
+                        <input matInput #postalCode maxlength="5" placeholder="Ex. 94105" value="94043">
+                        <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
+
+                    </mat-form-field>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <button mat-button color="primary" mat-dialog-close>Kapat</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</ng-template>

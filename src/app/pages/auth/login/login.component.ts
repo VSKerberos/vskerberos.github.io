@@ -27,9 +27,10 @@ export class LoginComponent implements OnInit {
       private store: Store<AppState>) {
 
       this.form = fb.group({
-          email: ['mavi', [Validators.required]],
-          password: ['pa$$w0rd', [Validators.required]]
+          email: ['', [Validators.required]],
+          password: ['', [Validators.required]]
       });
+      // mavi pa$$w0rd
 
   }
 
@@ -48,7 +49,8 @@ export class LoginComponent implements OnInit {
 
           this.router.navigateByUrl('/dashboard');
         } else {
-            alert('Login Failed');
+            alert('Hatalı Kulalnıcı adı veya Şifre');
+            this.form.reset();
         }
         //   .pipe(
         //       tap(user => {

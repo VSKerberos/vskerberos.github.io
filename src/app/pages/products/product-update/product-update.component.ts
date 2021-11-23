@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IProduct, IProductMat, IProductMaterial } from 'src/app/core/core/models/product';
 import { FireBaseService } from 'src/app/core/services/fire-base.service';
@@ -11,7 +11,7 @@ import { defaultDialogConfig } from '../../material/default-dialog-config';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductMaterialComponent } from '../product-material/product-material.component';
 import { SpinnerService } from 'src/app/core/spinner.service';
-import { delay, timeout } from 'rxjs/internal/operators';
+
 
 @Component({
   selector: 'app-product-update',
@@ -28,6 +28,9 @@ export class ProductUpdateComponent implements OnInit {
   productDetail: IProductMaterial[]= [];
   relationProduct:IProductMat;
   productUpdateMessage:string='Ürün Başarı ile güncellendi.';
+  selectedEditProduct:IProductMaterial;
+
+  @ViewChild('dialogTemplate') dialogTemplate: TemplateRef<any>;
 
   constructor(public fb: FormBuilder,
     private materialService:ProductMaterialService,
@@ -126,6 +129,75 @@ if (index > -1) {
    this.productDetail.splice(index, 1);
 }
 this.totalCost = math.format(this.getTotalCost(),5);
+}
+
+
+unitUpdated(event) {
+  console.log("New unit", event.target.value);
+  this.selectedEditProduct.unit = event.target.value;
+}
+quantityUpdated(event){
+  this.selectedEditProduct.quantity = event.target.value;
+ this.selectedEditProduct.total = math.multiply(Number(this.utility.replaceCommaToDot(this.selectedEditProduct.unitprice)),Number(this.selectedEditProduct.quantity));
+ this.totalCost = math.format(this.getTotalCost(),5);
+
+}
+remarksUpdated(event){
+  this.selectedEditProduct.remarks = event.target.value;
+}
+
+editMaterial(material:IProductMaterial) {
+this.selectedEditProduct = material;
+   //this.dialog.open(this.dialogTemplate);
+  console.log(`edit item ${material}`);
+
+  let dialogRef = this.dialog.open(this.dialogTemplate, {
+     data: { categoryname: material.categoryname,
+             unit:material.unit,
+             quantity:material.quantity,
+             remarks:material.remarks
+             }
+});
+
+
+  
+dialogRef.afterClosed().subscribe(result => {
+   console.log('result is :' +result);
+
+   
+   
+   
+});
+
+  // const dialogConfig = defaultDialogConfig();
+
+  // dialogConfig.data = {
+  //   dialogTitle:"Malzeme Güncelleme",
+  //   material,
+  //   mode: 'update',
+  //   recordId:material.id
+    
+  // };
+
+  // const dialogConfig = defaultDialogConfig();
+
+  // dialogConfig.data = {
+  //   dialogTitle:"Malzeme Güncelleme",
+  //   mode: 'update',
+  //   material
+  // };
+
+  // this.dialog.open(ProductMaterialComponent, dialogConfig)
+  //   .afterClosed()
+  //   .subscribe(); 
+
+
+  //   this.dialog.afterAllClosed.subscribe(result => {
+  //     this.getItems()
+  //   });
+
+
+
 }
 
 
