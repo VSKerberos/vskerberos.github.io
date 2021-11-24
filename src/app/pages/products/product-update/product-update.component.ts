@@ -138,8 +138,11 @@ unitUpdated(event) {
 }
 quantityUpdated(event){
   this.selectedEditProduct.quantity = event.target.value;
- this.selectedEditProduct.total = math.multiply(Number(this.utility.replaceCommaToDot(this.selectedEditProduct.unitprice)),Number(this.selectedEditProduct.quantity));
+ this.selectedEditProduct.total =math.round(math.multiply( Number(this.utility.replaceCommaToDot(this.selectedEditProduct.unitprice)), 
+                                                           Number(this.utility.replaceCommaToDot(this.selectedEditProduct.quantity))),3);
  this.totalCost = math.format(this.getTotalCost(),5);
+
+ math.add(math.bignumber(0.1), math.bignumber(0.2)) 
 
 }
 remarksUpdated(event){
