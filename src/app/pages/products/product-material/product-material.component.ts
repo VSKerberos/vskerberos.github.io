@@ -162,15 +162,15 @@ this.productMatForm.patchValue({total  :  calculatedTotal});
   }
 
   submitForm(){
-    for (let el in this.productMatForm.controls) {
-      if (this.productMatForm.controls[el].errors) {
-        console.log(el)
-      }
- }    
-    if(!this.productMatForm.valid){
-      this.spinnerService.sendClickEvent(this.productMissingMessage);
-      return;
-    }
+    // for (let el in this.productMatForm.controls) {
+    //   if (this.productMatForm.controls[el].errors) {
+    //     console.log(el)
+    //   }
+ //}    
+    //if(!this.productMatForm.valid){
+      //this.spinnerService.sendClickEvent(this.productMissingMessage);
+      //return;
+   // }
     
 
 
