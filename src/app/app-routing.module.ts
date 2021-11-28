@@ -30,11 +30,7 @@ const routes: Routes = [
   loadChildren:()=> import('./pages/products/product.module').then(mod=>mod.ProductModule),
   canActivate: [AuthGuard]
 },
-{
-    path: 'dashboard',
-    redirectTo: 'dashboard',
-    pathMatch: 'full'
-},
+
 {
   path:'**',
   redirectTo:'auth'

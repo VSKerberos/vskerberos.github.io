@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import {defaultDialogConfig } from './default-dialog-config'
 import { MaterialEntryComponent } from './material-entry/material-entry.component';
 import {IMaterial} from '../../core/core/models/material'
+import { ICategory } from 'src/app/core/core/models/category';
 
 
 @Component({
@@ -16,14 +17,15 @@ import {IMaterial} from '../../core/core/models/material'
 })
 export class MaterialComponent implements OnInit {
 
-  //public materialList: IMaterial[] = [];
   
   materialList: any;
   displayedColumns: string[] = [ 'demo-weight','demo-name', 'demo-unit','demo-symbol', 'demo-dimension','demo-remarks','demo-actions'];
   dataSource;
   materials$: Observable<IMaterial[]>;
   materialArr:IMaterial[];
-  private lessonListSubject = new Observable<IMaterial[]>();
+  categories:ICategory[]
+  filteredMaterialArr:IMaterial[];
+
   
   
   constructor(
@@ -33,41 +35,33 @@ export class MaterialComponent implements OnInit {
 
   ngOnInit(): void {
     
-    //this.getMaterials(); 
     this.getItems();
-    //this.getMaterialsByObject();
-    
-
+    this.filterCategories();
   }
 
   getItems(){
     this.firebaseService.getMaterialsObservable();
     this.materials$ = this.firebaseService.materials$;
- //   this.dataSource = this.materials$;
     this.getArrayFromObservable();
-    //this.dataSource = this.materialArr;
   }
   getArrayFromObservable(){
 
     let sorted$: Observable<IMaterial[]> = this.materials$.pipe(
-      map(items=> items.sort(this.sortByGroupCode))
+      map(items=> items.sort(this.sortByGroupCode)),
     );
 
-  
-
     sorted$.subscribe((categories)=> {
-      categories= categories.sort(x=>x.groupcode),
       this.materialArr = categories as IMaterial[]
   });
 
-  
-  
-  
+
+}
 
 
-
-
-  
+sortByGroupText(a,b){
+  if (b.name > a.name) return -1;
+    if (b.name < a.name) return 1;
+    return 0;
 }
 
 sortByGroupCode(a,b) {
@@ -81,8 +75,6 @@ sortByGroupCode(a,b) {
 
 
   deleteRecord(id: any){
-
-    console.log('Deleted recor is: '+ id);
     this.firebaseService.deleteMaterial(id);
     this.getItems();
   }
@@ -104,11 +96,6 @@ sortByGroupCode(a,b) {
       .afterClosed()
       .subscribe();
 
-      var number = 1434.02;
-      console.log(new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'TRY' }).format(number));
-      // → 123.456,79 €
-
-      
       this.dialog.afterAllClosed.subscribe(result => {
         this.getItems()
       });
@@ -146,11 +133,17 @@ addMaterial(){
       };
 
       getMaterialsByObject (){
-
      this.firebaseService.getMaterialsByObject();
-      console.log("yunus  "+this.firebaseService._mechanics);
+      }
 
+      filterCategories()
+      {
+        this.categories= JSON.parse(localStorage.getItem('categories')) as ICategory[];
+      }
+      onGroupChange(ob) {
+        this.filteredMaterialArr = this.materialArr.filter(XX=>XX.groupcode ==ob).sort(this.sortByGroupText); 
       }
 
 }
+
 

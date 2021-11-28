@@ -37,11 +37,10 @@ this.getItems();
     this.categories$ = this.firebaseService.categories$;
    
     this.categories$ = this.categories$.pipe(map((data) => {
-      data.sort((a, b) => {
-          return a.categoryid < b.categoryid ? -1 : 1;
-       });
+      data.sort(this.sortByTitle)
       return data;
       }));
+      
     this.dataSource = this.categories$;
     this.mode ='create';
   }
@@ -115,7 +114,6 @@ this.firebaseService.updateCategory(this.localCategory,this.updatedRecord.id).ca
     confirmDialog.afterClosed().subscribe(result =>{
       if(result === true)
       {
-      console.log('@@@@Silme işlemi Doğrulandı');
       this.firebaseService.deleteCategorie(id);
       this.mode ='create';   
       this.getItems();
@@ -127,9 +125,14 @@ this.firebaseService.updateCategory(this.localCategory,this.updatedRecord.id).ca
 
   updateRecord(element:ICategory){
     this.mode ='update';
-    console.log('update record:'+element.title);
     this.categoryForm.patchValue({title: element.title});
     this.updatedRecord = element;
+  }
+
+  sortByTitle(a,b){
+    if (b.title > a.title) return -1;
+      if (b.title < a.title) return 1;
+      return 0;
   }
 
 

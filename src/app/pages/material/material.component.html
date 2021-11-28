@@ -10,14 +10,38 @@
 
 
 </div>
+<mat-grid-list cols="2" rowHeight="100px">
+    <mat-grid-tile>
+        <div class="demo-button-container space-left">
+            <button mat-fab color="primary" (click)="addMaterial()" aria-label="Example icon button with a delete icon">
+                <mat-icon>add</mat-icon>
+              </button>
+        </div>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <div class="demo-button-container space-left">
+            <h4>Grup Bilgisi</h4>
+            <mat-form-field appearance="fill">
+                <mat-label>Grup Bilgisi Seçiniz</mat-label>
+                <mat-select (selectionChange)="onGroupChange($event.value)">
+
+                    <mat-option *ngFor="let cat of categories" [value]="cat.categoryid">
+                        {{cat.title}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+    </mat-grid-tile>
+
+</mat-grid-list>
 
 
 
-<div class="demo-button-container space-left">
-    <button mat-fab color="primary" (click)="addMaterial()" aria-label="Example icon button with a delete icon">
-        <mat-icon>add</mat-icon>
-      </button>
-</div>
+
+<div class="space"></div>
+
+
 <div class="space"></div>
 
 
@@ -25,7 +49,7 @@
 <div class="container space" fxLayout="row" fxLayoutAlign="center none">
 
 
-    <table mat-table [dataSource]="materialArr" class="mat-elevation-z8 demo-table">
+    <table mat-table [dataSource]="filteredMaterialArr" class="mat-elevation-z8 demo-table" *ngIf="filteredMaterialArr?.length>0">
         <!-- Position Column -->
         <!-- <ng-container matColumnDef="demo-position">
             <th mat-header-cell *matHeaderCellDef> Adı </th>
