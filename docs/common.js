@@ -1,7 +1,7 @@
 "use strict";
 (self["webpackChunkcost_calculator"] = self["webpackChunkcost_calculator"] || []).push([[592],{
 
-/***/ 39191:
+/***/ 53176:
 /*!*********************************************************!*\
   !*** ./src/app/pages/material/default-dialog-config.ts ***!
   \*********************************************************/
@@ -11,7 +11,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "defaultDialogConfig": () => (/* binding */ defaultDialogConfig)
 /* harmony export */ });
-/* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/material/dialog */ 22213);
+/* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/material/dialog */ 44958);
 
 function defaultDialogConfig() {
   const dialogConfig = new _angular_material_dialog__WEBPACK_IMPORTED_MODULE_0__.MatDialogConfig();

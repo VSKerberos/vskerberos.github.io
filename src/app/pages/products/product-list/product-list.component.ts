@@ -39,7 +39,7 @@ export class ProductListComponent implements OnInit {
    
     this.products$ = this.products$.pipe(map((data) => {
       data.sort((a, b) => {
-          return a.name < b.name ? -1 : 1;
+          return a.code < b.code ? -1 : 1;
        });
       return data;
       }));
@@ -47,7 +47,6 @@ export class ProductListComponent implements OnInit {
   }
 
   deleteRecord(id: any){
-    //console.log('Deleted recor is: '+ id);
     this.firebaseService.deleteCategorie(id);
     this.firebaseService.deleteProduct(id);
     this.getItems();

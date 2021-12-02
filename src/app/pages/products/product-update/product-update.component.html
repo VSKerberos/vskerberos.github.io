@@ -46,17 +46,13 @@
                         <tr>
                             <th scope="col">Grup Adı</th>
                             <th scope="col">Malzeme Adı</th>
+                            <th scope="col">Miktar</th>
                             <th scope="col">Birim</th>
                             <th scope="col">Birim Fiyat</th>
-                            <th scope="col">Mal Giriş Tarihi</th>
-                            <th scope="col">Miktarı</th>
                             <th scope="col">Açıklama</th>
+                            <th scope="col">Fiyat Giriş Tarihi</th>
                             <th scope="col">Toplam</th>
                             <th scope="col"></th>
-
-
-
-
                         </tr>
                     </thead>
                     <tfoot>
@@ -69,11 +65,11 @@
                         <tr *ngFor="let mat of productDetail">
                             <th scope="row">{{mat.categoryname}}</th>
                             <th scope="row">{{mat.materialname}}</th>
+                            <td data-title="Released">{{mat.quantity}}</td>
                             <td data-title="Released">{{mat.unit}}</td>
                             <td data-title="Studio">{{mat.unitprice}}</td>
-                            <td data-title="Studio">{{mat.materialdate}}</td>
-                            <td data-title="Released">{{mat.quantity}}</td>
                             <td data-title="Domestic Gross" data-type="currency">{{mat.remarks}}</td>
+                            <td data-title="Studio">{{mat.materialdate}}</td>
                             <td data-title="International Gross" data-type="currency">{{mat.total}}</td>
                             <td data-title="Operation">
                                 <button mat-icon-button aria-label="Example icon-button with a heart icon" matTooltip="Sil" (click)="deleteRecord(mat)">

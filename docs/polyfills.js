@@ -1,7 +1,7 @@
 "use strict";
 (self["webpackChunkcost_calculator"] = self["webpackChunkcost_calculator"] || []).push([[429],{
 
-/***/ 46026:
+/***/ 3279:
 /*!*******************************************!*\
   !*** ./node_modules/zone.js/dist/zone.js ***!
   \*******************************************/
@@ -70,7 +70,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;
       }
     }
 
-    var Zone = function () {
+    var Zone =
+    /** @class */
+    function () {
       function Zone(parent, zoneSpec) {
         this._parent = parent;
         this._name = zoneSpec ? zoneSpec.name || 'unnamed' : '<root>';
@@ -389,7 +391,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;
       }
     };
 
-    var ZoneDelegate = function () {
+    var ZoneDelegate =
+    /** @class */
+    function () {
       function ZoneDelegate(zone, parentDelegate, zoneSpec) {
         this._taskCounts = {
           'microTask': 0,
@@ -549,7 +553,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;
       return ZoneDelegate;
     }();
 
-    var ZoneTask = function () {
+    var ZoneTask =
+    /** @class */
+    function () {
       function ZoneTask(type, source, callback, options, scheduleFn, cancelFn) {
         // tslint:disable-next-line:require-internal-with-underscore
         this._zone = null;
@@ -1620,7 +1626,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;
 
     var noop = function () {};
 
-    var ZoneAwarePromise = function () {
+    var ZoneAwarePromise =
+    /** @class */
+    function () {
       function ZoneAwarePromise(executor) {
         var promise = this;
 
@@ -4008,14 +4016,14 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;
 
 /***/ }),
 
-/***/ 7435:
+/***/ 67344:
 /*!**************************!*\
   !*** ./src/polyfills.ts ***!
   \**************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var zone_js_dist_zone__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! zone.js/dist/zone */ 46026);
+/* harmony import */ var zone_js_dist_zone__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! zone.js/dist/zone */ 3279);
 /* harmony import */ var zone_js_dist_zone__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(zone_js_dist_zone__WEBPACK_IMPORTED_MODULE_0__);
 /**
  * This file includes polyfills needed by Angular and is loaded before the app.
@@ -4036,16 +4044,6 @@ __webpack_require__.r(__webpack_exports__);
 /***************************************************************************************************
  * BROWSER POLYFILLS
  */
-
-/** IE10 and IE11 requires the following for NgClass support on SVG elements */
-// import 'classlist.js';  // Run `npm install --save classlist.js`.
-
-/**
- * Web Animations `@angular/platform-browser/animations`
- * Only required if AnimationBuilder is used within the application and using IE/Edge or Safari.
- * Standard animation support in Angular DOES NOT require any polyfills (as of Angular 6.0).
- */
-// import 'web-animations-js';  // Run `npm install --save web-animations-js`.
 
 /**
  * By default, zone.js will patch all possible macroTask and DomEvents
@@ -4085,7 +4083,7 @@ __webpack_require__.r(__webpack_exports__);
 },
 /******/ __webpack_require__ => { // webpackRuntimeModules
 /******/ var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-/******/ var __webpack_exports__ = (__webpack_exec__(7435));
+/******/ var __webpack_exports__ = (__webpack_exec__(67344));
 /******/ }
 ]);
 //# sourceMappingURL=polyfills.js.map

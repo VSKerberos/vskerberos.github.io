@@ -22,6 +22,7 @@ import {AuthModule} from '../app/pages/auth/auth.module';
     AuthModule.forRoot(),
     HttpClientModule,
     StoreModule.forRoot( reducers, {metaReducers}),
+    
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
     
   ],
