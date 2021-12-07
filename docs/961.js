@@ -16402,7 +16402,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _function_algebra_slu_js__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./function/algebra/slu.js */ 89701);
 /* harmony import */ var _function_algebra_rationalize_js__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./function/algebra/rationalize.js */ 42772);
 /* harmony import */ var _function_algebra_simplify_js__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./function/algebra/simplify.js */ 10616);
-/* harmony import */ var _function_algebra_lup_js__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./function/algebra/lup.js */ 14127);
+/* harmony import */ var _function_algebra_lup_js__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./function/algebra/lup.js */ 22756);
 /* harmony import */ var _function_algebra_lsolve_js__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./function/algebra/lsolve.js */ 39721);
 /* harmony import */ var _function_algebra_lsolveAll_js__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./function/algebra/lsolveAll.js */ 79359);
 /* harmony import */ var _function_algebra_derivative_js__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./function/algebra/derivative.js */ 89047);
@@ -17190,7 +17190,7 @@ var lsolveAllDocs = {
 
 /***/ }),
 
-/***/ 14127:
+/***/ 22756:
 /*!*************************************************************************************!*\
   !*** ./node_modules/mathjs/lib/esm/expression/embeddedDocs/function/algebra/lup.js ***!
   \*************************************************************************************/

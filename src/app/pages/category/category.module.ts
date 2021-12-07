@@ -12,7 +12,8 @@ import {CategoryRoutingModule} from './category-routing.module';
   imports: [
     CommonModule,
     SharedModule,
-    CategoryRoutingModule,
+    CategoryRoutingModule
+    
     
   ]
 })

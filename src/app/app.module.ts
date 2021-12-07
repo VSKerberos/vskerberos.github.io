@@ -9,6 +9,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import {metaReducers, reducers} from './reducers';
 import {AuthModule} from '../app/pages/auth/auth.module';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,9 @@ import {AuthModule} from '../app/pages/auth/auth.module';
     HttpClientModule,
     StoreModule.forRoot( reducers, {metaReducers}),
     
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    
+    StoreRouterConnectingModule.forRoot()
     
   ],
   providers: [],
