@@ -8,7 +8,7 @@ import {loadAllCategories} from './category.actions'
 
 
 @Injectable()
-export class CategoriesResolver implements Resolve<any> {
+export class CategoriesResolver implements Resolve<boolean> {
 
     loading = false;
 constructor(private store: Store<AppState>) {}

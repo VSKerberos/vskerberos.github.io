@@ -40,7 +40,9 @@ export class MaterialComponent implements OnInit {
   }
 
   getItems(){
-    this.firebaseService.getMaterialsObservable();
+    if(!this.firebaseService.IsMaterialsInLocalStorage())
+    {this.firebaseService.getMaterialsObservable(); }
+
     this.materials$ = this.firebaseService.materials$;
     this.getArrayFromObservable();
   }

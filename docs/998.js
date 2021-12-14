@@ -1,6 +1,22 @@
 "use strict";
 (self["webpackChunkcost_calculator"] = self["webpackChunkcost_calculator"] || []).push([[998],{
 
+/***/ 76084:
+/*!************************************************!*\
+  !*** ./src/app/pages/category/action-types.ts ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "CategoryActions": () => (/* reexport module object */ _category_actions__WEBPACK_IMPORTED_MODULE_0__)
+/* harmony export */ });
+/* harmony import */ var _category_actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./category.actions */ 94833);
+
+
+
+/***/ }),
+
 /***/ 80507:
 /*!***********************************************************!*\
   !*** ./src/app/pages/category/category-routing.module.ts ***!
@@ -27,10 +43,7 @@ const routes = [{
   component: _shared_layout_layout_layout_component__WEBPACK_IMPORTED_MODULE_0__.LayoutComponent,
   children: [{
     path: '',
-    component: _category_component__WEBPACK_IMPORTED_MODULE_1__.CategoryComponent,
-    resolve: {
-      categories: _category_resolver__WEBPACK_IMPORTED_MODULE_2__.CategoriesResolver
-    }
+    component: _category_component__WEBPACK_IMPORTED_MODULE_1__.CategoryComponent
   }]
 }];
 let CategoryRoutingModule = /*#__PURE__*/(() => {
@@ -59,24 +72,6 @@ let CategoryRoutingModule = /*#__PURE__*/(() => {
 
 /***/ }),
 
-/***/ 94833:
-/*!****************************************************!*\
-  !*** ./src/app/pages/category/category.actions.ts ***!
-  \****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "loadAllCategories": () => (/* binding */ loadAllCategories),
-/* harmony export */   "allCategoriesLoaded": () => (/* binding */ allCategoriesLoaded)
-/* harmony export */ });
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ngrx/store */ 89407);
-
-const loadAllCategories = (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_0__.createAction)("[Categories Resolver] Load All Categories");
-const allCategoriesLoaded = (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_0__.createAction)("[Load Categories Effect] All Categories Loaded", (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_0__.props)());
-
-/***/ }),
-
 /***/ 11813:
 /*!******************************************************!*\
   !*** ./src/app/pages/category/category.component.ts ***!
@@ -93,13 +88,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ 14001);
 /* harmony import */ var src_app_core_services_fire_base_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/app/core/services/fire-base.service */ 94817);
 /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/material/dialog */ 44958);
-/* harmony import */ var _angular_flex_layout_flex__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/flex-layout/flex */ 88669);
-/* harmony import */ var _angular_material_card__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/card */ 98140);
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ngrx/store */ 89407);
+/* harmony import */ var _angular_flex_layout_flex__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/flex-layout/flex */ 39057);
+/* harmony import */ var _angular_material_card__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material/card */ 98140);
 /* harmony import */ var _shared_components_text_input_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../shared/components/text-input.component */ 62204);
-/* harmony import */ var _angular_material_button__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material/button */ 96695);
-/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/material/table */ 98536);
-/* harmony import */ var _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/material/tooltip */ 14415);
-/* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/material/icon */ 97536);
+/* harmony import */ var _angular_material_button__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/material/button */ 96695);
+/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/material/table */ 98536);
+/* harmony import */ var _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/material/tooltip */ 14415);
+/* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/material/icon */ 97536);
+
 
 
 
@@ -212,10 +209,11 @@ function CategoryComponent_tr_31_Template(rf, ctx) {
 
 let CategoryComponent = /*#__PURE__*/(() => {
   class CategoryComponent {
-    constructor(firebaseService, fb, dialog) {
+    constructor(firebaseService, fb, dialog, store) {
       this.firebaseService = firebaseService;
       this.fb = fb;
       this.dialog = dialog;
+      this.store = store;
       this.displayedColumns = ['position', 'name', 'demo-actions'];
       this.reactiveForm();
     }
@@ -225,7 +223,10 @@ let CategoryComponent = /*#__PURE__*/(() => {
     }
 
     getItems() {
-      this.firebaseService.getCategories();
+      if (!this.firebaseService.IsCategoriesInLocalStorage()) {
+        this.firebaseService.getCategories();
+      }
+
       this.categories$ = this.firebaseService.categories$;
       this.categories$ = this.categories$.pipe((0,rxjs_internal_operators__WEBPACK_IMPORTED_MODULE_4__.map)(data => {
         data.sort(this.sortByTitle);
@@ -323,7 +324,7 @@ let CategoryComponent = /*#__PURE__*/(() => {
   }
 
   CategoryComponent.ɵfac = function CategoryComponent_Factory(t) {
-    return new (t || CategoryComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](src_app_core_services_fire_base_service__WEBPACK_IMPORTED_MODULE_1__.FireBaseService), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_5__.FormBuilder), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_angular_material_dialog__WEBPACK_IMPORTED_MODULE_6__.MatDialog));
+    return new (t || CategoryComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](src_app_core_services_fire_base_service__WEBPACK_IMPORTED_MODULE_1__.FireBaseService), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_5__.FormBuilder), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_angular_material_dialog__WEBPACK_IMPORTED_MODULE_6__.MatDialog), _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdirectiveInject"](_ngrx_store__WEBPACK_IMPORTED_MODULE_7__.Store));
   };
 
   CategoryComponent.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdefineComponent"]({
@@ -408,10 +409,59 @@ let CategoryComponent = /*#__PURE__*/(() => {
         _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵproperty"]("matRowDefColumns", ctx.displayedColumns);
       }
     },
-    directives: [_angular_flex_layout_flex__WEBPACK_IMPORTED_MODULE_7__.DefaultLayoutAlignDirective, _angular_material_dialog__WEBPACK_IMPORTED_MODULE_6__.MatDialogContent, _angular_flex_layout_flex__WEBPACK_IMPORTED_MODULE_7__.DefaultLayoutDirective, _angular_flex_layout_flex__WEBPACK_IMPORTED_MODULE_7__.DefaultFlexDirective, _angular_forms__WEBPACK_IMPORTED_MODULE_5__["ɵNgNoValidate"], _angular_forms__WEBPACK_IMPORTED_MODULE_5__.NgControlStatusGroup, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.FormGroupDirective, _angular_material_card__WEBPACK_IMPORTED_MODULE_8__.MatCard, _angular_material_card__WEBPACK_IMPORTED_MODULE_8__.MatCardHeader, _angular_material_card__WEBPACK_IMPORTED_MODULE_8__.MatCardTitle, _angular_material_dialog__WEBPACK_IMPORTED_MODULE_6__.MatDialogTitle, _angular_material_card__WEBPACK_IMPORTED_MODULE_8__.MatCardContent, _shared_components_text_input_component__WEBPACK_IMPORTED_MODULE_2__.TextInputComponent, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.NgControlStatus, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.FormControlDirective, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.MinLengthValidator, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.MaxLengthValidator, _angular_material_card__WEBPACK_IMPORTED_MODULE_8__.MatCardActions, _angular_material_button__WEBPACK_IMPORTED_MODULE_9__.MatButton, _angular_material_table__WEBPACK_IMPORTED_MODULE_10__.MatTable, _angular_material_table__WEBPACK_IMPORTED_MODULE_10__.MatColumnDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_10__.MatHeaderCellDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_10__.MatCellDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_10__.MatHeaderRowDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_10__.MatRowDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_10__.MatHeaderCell, _angular_material_table__WEBPACK_IMPORTED_MODULE_10__.MatCell, _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_11__.MatTooltip, _angular_material_icon__WEBPACK_IMPORTED_MODULE_12__.MatIcon, _angular_material_table__WEBPACK_IMPORTED_MODULE_10__.MatHeaderRow, _angular_material_table__WEBPACK_IMPORTED_MODULE_10__.MatRow],
+    directives: [_angular_flex_layout_flex__WEBPACK_IMPORTED_MODULE_8__.DefaultLayoutAlignDirective, _angular_material_dialog__WEBPACK_IMPORTED_MODULE_6__.MatDialogContent, _angular_flex_layout_flex__WEBPACK_IMPORTED_MODULE_8__.DefaultLayoutDirective, _angular_flex_layout_flex__WEBPACK_IMPORTED_MODULE_8__.DefaultFlexDirective, _angular_forms__WEBPACK_IMPORTED_MODULE_5__["ɵNgNoValidate"], _angular_forms__WEBPACK_IMPORTED_MODULE_5__.NgControlStatusGroup, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.FormGroupDirective, _angular_material_card__WEBPACK_IMPORTED_MODULE_9__.MatCard, _angular_material_card__WEBPACK_IMPORTED_MODULE_9__.MatCardHeader, _angular_material_card__WEBPACK_IMPORTED_MODULE_9__.MatCardTitle, _angular_material_dialog__WEBPACK_IMPORTED_MODULE_6__.MatDialogTitle, _angular_material_card__WEBPACK_IMPORTED_MODULE_9__.MatCardContent, _shared_components_text_input_component__WEBPACK_IMPORTED_MODULE_2__.TextInputComponent, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.NgControlStatus, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.FormControlDirective, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.MinLengthValidator, _angular_forms__WEBPACK_IMPORTED_MODULE_5__.MaxLengthValidator, _angular_material_card__WEBPACK_IMPORTED_MODULE_9__.MatCardActions, _angular_material_button__WEBPACK_IMPORTED_MODULE_10__.MatButton, _angular_material_table__WEBPACK_IMPORTED_MODULE_11__.MatTable, _angular_material_table__WEBPACK_IMPORTED_MODULE_11__.MatColumnDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_11__.MatHeaderCellDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_11__.MatCellDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_11__.MatHeaderRowDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_11__.MatRowDef, _angular_material_table__WEBPACK_IMPORTED_MODULE_11__.MatHeaderCell, _angular_material_table__WEBPACK_IMPORTED_MODULE_11__.MatCell, _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_12__.MatTooltip, _angular_material_icon__WEBPACK_IMPORTED_MODULE_13__.MatIcon, _angular_material_table__WEBPACK_IMPORTED_MODULE_11__.MatHeaderRow, _angular_material_table__WEBPACK_IMPORTED_MODULE_11__.MatRow],
     styles: ["table[_ngcontent-%COMP%] {\r\n    width: 95%;\r\n    margin: 0 auto;\r\n    margin-top: 40px;\r\n}\r\n\r\ntable[_ngcontent-%COMP%]   th[_ngcontent-%COMP%] {\r\n    font-size: large;\r\n    font-weight: bold;\r\n}\r\n\r\n.special-header[_ngcontent-%COMP%] {\r\n    margin: 1em 0 0.5em 0;\r\n    color: #343434;\r\n    font-weight: normal;\r\n    font-family: 'Ultra', sans-serif;\r\n    font-size: 36px;\r\n    line-height: 42px;\r\n    text-transform: uppercase;\r\n    text-shadow: 0 2px white, 0 3px #777;\r\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNhdGVnb3J5LmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxVQUFVO0lBQ1YsY0FBYztJQUNkLGdCQUFnQjtBQUNwQjs7QUFFQTtJQUNJLGdCQUFnQjtJQUNoQixpQkFBaUI7QUFDckI7O0FBRUE7SUFDSSxxQkFBcUI7SUFDckIsY0FBYztJQUNkLG1CQUFtQjtJQUNuQixnQ0FBZ0M7SUFDaEMsZUFBZTtJQUNmLGlCQUFpQjtJQUNqQix5QkFBeUI7SUFDekIsb0NBQW9DO0FBQ3hDIiwiZmlsZSI6ImNhdGVnb3J5LmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyJ0YWJsZSB7XHJcbiAgICB3aWR0aDogOTUlO1xyXG4gICAgbWFyZ2luOiAwIGF1dG87XHJcbiAgICBtYXJnaW4tdG9wOiA0MHB4O1xyXG59XHJcblxyXG50YWJsZSB0aCB7XHJcbiAgICBmb250LXNpemU6IGxhcmdlO1xyXG4gICAgZm9udC13ZWlnaHQ6IGJvbGQ7XHJcbn1cclxuXHJcbi5zcGVjaWFsLWhlYWRlciB7XHJcbiAgICBtYXJnaW46IDFlbSAwIDAuNWVtIDA7XHJcbiAgICBjb2xvcjogIzM0MzQzNDtcclxuICAgIGZvbnQtd2VpZ2h0OiBub3JtYWw7XHJcbiAgICBmb250LWZhbWlseTogJ1VsdHJhJywgc2Fucy1zZXJpZjtcclxuICAgIGZvbnQtc2l6ZTogMzZweDtcclxuICAgIGxpbmUtaGVpZ2h0OiA0MnB4O1xyXG4gICAgdGV4dC10cmFuc2Zvcm06IHVwcGVyY2FzZTtcclxuICAgIHRleHQtc2hhZG93OiAwIDJweCB3aGl0ZSwgMCAzcHggIzc3NztcclxufSJdfQ== */"]
   });
   return CategoryComponent;
+})();
+
+/***/ }),
+
+/***/ 30814:
+/*!****************************************************!*\
+  !*** ./src/app/pages/category/category.effects.ts ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "CategoryEffects": () => (/* binding */ CategoryEffects)
+/* harmony export */ });
+/* harmony import */ var _ngrx_effects__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ngrx/effects */ 52251);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/operators */ 54852);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs/operators */ 88377);
+/* harmony import */ var _action_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./action-types */ 76084);
+/* harmony import */ var _category_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./category.actions */ 94833);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/core */ 14001);
+/* harmony import */ var src_app_core_services_fire_base_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/core/services/fire-base.service */ 94817);
+
+
+
+
+
+
+
+let CategoryEffects = /*#__PURE__*/(() => {
+  class CategoryEffects {
+    constructor(actions$, service) {
+      this.actions$ = actions$;
+      this.service = service;
+      this.loadCategories$ = (0,_ngrx_effects__WEBPACK_IMPORTED_MODULE_3__.createEffect)(() => this.actions$.pipe((0,_ngrx_effects__WEBPACK_IMPORTED_MODULE_3__.ofType)(_action_types__WEBPACK_IMPORTED_MODULE_0__.CategoryActions.loadAllCategories), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_4__.concatMap)(action => this.service.getCategories()), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_5__.map)(categories => (0,_category_actions__WEBPACK_IMPORTED_MODULE_1__.allCategoriesLoaded)({
+        categories
+      }))));
+    }
+
+  }
+
+  CategoryEffects.ɵfac = function CategoryEffects_Factory(t) {
+    return new (t || CategoryEffects)(_angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵinject"](_ngrx_effects__WEBPACK_IMPORTED_MODULE_3__.Actions), _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵinject"](src_app_core_services_fire_base_service__WEBPACK_IMPORTED_MODULE_2__.FireBaseService));
+  };
+
+  CategoryEffects.ɵprov = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdefineInjectable"]({
+    token: CategoryEffects,
+    factory: CategoryEffects.ɵfac
+  });
+  return CategoryEffects;
 })();
 
 /***/ }),
@@ -426,89 +476,90 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "CategoryModule": () => (/* binding */ CategoryModule)
 /* harmony export */ });
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common */ 28267);
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @ngrx/store */ 89407);
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/common */ 28267);
 /* harmony import */ var _shared_shared_module__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../shared/shared.module */ 51382);
 /* harmony import */ var _category_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./category.component */ 11813);
 /* harmony import */ var _category_routing_module__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./category-routing.module */ 80507);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ 14001);
+/* harmony import */ var _ngrx_effects__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @ngrx/effects */ 52251);
+/* harmony import */ var _category_effects__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./category.effects */ 30814);
+/* harmony import */ var _category_resolver__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./category.resolver */ 55568);
+/* harmony import */ var _reducers_category_reducers__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./reducers/category-reducers */ 13748);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/core */ 14001);
+/* harmony import */ var _ngrx_data__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @ngrx/data */ 97544);
 
 
 
 
 
+
+
+
+
+
+
+
+
+const entityMetaData = {
+  Category: {}
+};
 let CategoryModule = /*#__PURE__*/(() => {
-  class CategoryModule {}
+  class CategoryModule {
+    constructor(eds) {
+      this.eds = eds;
+      eds.registerMetadataMap(entityMetaData);
+    }
+
+  }
 
   CategoryModule.ɵfac = function CategoryModule_Factory(t) {
-    return new (t || CategoryModule)();
+    return new (t || CategoryModule)(_angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵinject"](_ngrx_data__WEBPACK_IMPORTED_MODULE_7__.EntityDefinitionService));
   };
 
-  CategoryModule.ɵmod = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdefineNgModule"]({
+  CategoryModule.ɵmod = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdefineNgModule"]({
     type: CategoryModule
   });
-  CategoryModule.ɵinj = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdefineInjector"]({
-    imports: [[_angular_common__WEBPACK_IMPORTED_MODULE_4__.CommonModule, _shared_shared_module__WEBPACK_IMPORTED_MODULE_0__.SharedModule, _category_routing_module__WEBPACK_IMPORTED_MODULE_2__.CategoryRoutingModule]]
+  CategoryModule.ɵinj = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵdefineInjector"]({
+    providers: [_category_resolver__WEBPACK_IMPORTED_MODULE_4__.CategoriesResolver],
+    imports: [[_angular_common__WEBPACK_IMPORTED_MODULE_8__.CommonModule, _shared_shared_module__WEBPACK_IMPORTED_MODULE_0__.SharedModule, _category_routing_module__WEBPACK_IMPORTED_MODULE_2__.CategoryRoutingModule, _ngrx_effects__WEBPACK_IMPORTED_MODULE_9__.EffectsModule.forFeature([_category_effects__WEBPACK_IMPORTED_MODULE_3__.CategoryEffects]), _ngrx_store__WEBPACK_IMPORTED_MODULE_10__.StoreModule.forFeature("categories", _reducers_category_reducers__WEBPACK_IMPORTED_MODULE_5__.categoriesReducer)]]
   });
   return CategoryModule;
 })();
 
 (function () {
-  (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵsetNgModuleScope"](CategoryModule, {
+  (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_6__["ɵɵsetNgModuleScope"](CategoryModule, {
     declarations: [_category_component__WEBPACK_IMPORTED_MODULE_1__.CategoryComponent],
-    imports: [_angular_common__WEBPACK_IMPORTED_MODULE_4__.CommonModule, _shared_shared_module__WEBPACK_IMPORTED_MODULE_0__.SharedModule, _category_routing_module__WEBPACK_IMPORTED_MODULE_2__.CategoryRoutingModule]
+    imports: [_angular_common__WEBPACK_IMPORTED_MODULE_8__.CommonModule, _shared_shared_module__WEBPACK_IMPORTED_MODULE_0__.SharedModule, _category_routing_module__WEBPACK_IMPORTED_MODULE_2__.CategoryRoutingModule, _ngrx_effects__WEBPACK_IMPORTED_MODULE_9__.EffectsFeatureModule, _ngrx_store__WEBPACK_IMPORTED_MODULE_10__.StoreFeatureModule]
   });
 })();
 
 /***/ }),
 
-/***/ 55568:
-/*!*****************************************************!*\
-  !*** ./src/app/pages/category/category.resolver.ts ***!
-  \*****************************************************/
+/***/ 13748:
+/*!**************************************************************!*\
+  !*** ./src/app/pages/category/reducers/category-reducers.ts ***!
+  \**************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "CategoriesResolver": () => (/* binding */ CategoriesResolver)
+/* harmony export */   "adapter": () => (/* binding */ adapter),
+/* harmony export */   "initialCategoryState": () => (/* binding */ initialCategoryState),
+/* harmony export */   "categoriesReducer": () => (/* binding */ categoriesReducer),
+/* harmony export */   "selectAll": () => (/* binding */ selectAll)
 /* harmony export */ });
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/operators */ 85029);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs/operators */ 84452);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ 98904);
-/* harmony import */ var _category_actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./category.actions */ 94833);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/core */ 14001);
-/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @ngrx/store */ 89407);
+/* harmony import */ var _ngrx_entity__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngrx/entity */ 82607);
+/* harmony import */ var _ngrx_store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ngrx/store */ 89407);
+/* harmony import */ var _action_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../action-types */ 76084);
 
 
 
-
-let CategoriesResolver = /*#__PURE__*/(() => {
-  class CategoriesResolver {
-    constructor(store) {
-      this.store = store;
-      this.loading = false;
-    }
-
-    resolve(route, state) {
-      return this.store.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_1__.tap)(() => {
-        if (!this.loading) {
-          this.loading = true;
-          this.store.dispatch((0,_category_actions__WEBPACK_IMPORTED_MODULE_0__.loadAllCategories)());
-        }
-      }), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_2__.first)(), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_3__.finalize)(() => this.loading = false));
-    }
-
-  }
-
-  CategoriesResolver.ɵfac = function CategoriesResolver_Factory(t) {
-    return new (t || CategoriesResolver)(_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵinject"](_ngrx_store__WEBPACK_IMPORTED_MODULE_5__.Store));
-  };
-
-  CategoriesResolver.ɵprov = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineInjectable"]({
-    token: CategoriesResolver,
-    factory: CategoriesResolver.ɵfac
-  });
-  return CategoriesResolver;
-})();
+const adapter = (0,_ngrx_entity__WEBPACK_IMPORTED_MODULE_1__.createEntityAdapter)();
+const initialCategoryState = adapter.getInitialState();
+const categoriesReducer = (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_2__.createReducer)(initialCategoryState, (0,_ngrx_store__WEBPACK_IMPORTED_MODULE_2__.on)(_action_types__WEBPACK_IMPORTED_MODULE_0__.CategoryActions.allCategoriesLoaded, (state, action) => adapter.setAll(action.categories, state)));
+const {
+  selectAll
+} = adapter.getSelectors();
 
 /***/ })
 

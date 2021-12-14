@@ -52,7 +52,7 @@ export class ProductMaterialComponent implements OnInit {
   ngOnInit(): void {
     this.reactiveForm();
     this.getItems();
-     this.getCategories();
+    this.getCategories();
 
     this.categoryOptions = this.groupControl.valueChanges.pipe(
       startWith(''),
@@ -84,8 +84,6 @@ export class ProductMaterialComponent implements OnInit {
   onSelectionChanged(event: MatAutocompleteSelectedEvent) {
     
   this.selectedMaterial  = event.option.value;
-    console.log('@@'+ this.selectedMaterial.operationdate );
-    
     this.productMatForm.patchValue({unitprice:  this.selectedMaterial.price });
     this.productMatForm.patchValue({unitpricedate:this.selectedMaterial.operationdate });
     
@@ -100,7 +98,6 @@ export class ProductMaterialComponent implements OnInit {
 
   onGroupSelectedChanged(event:MatAutocompleteSelectedEvent){
     this.selectedCategory = event.option.value;
-    console.log('selectedcategory:'+this.selectedCategory.id+this.selectedCategory.categoryid);
     this.getItemsByCategoryId(this.selectedCategory.categoryid);
     this.searchMaterialOptions();
   }
@@ -115,7 +112,9 @@ export class ProductMaterialComponent implements OnInit {
 
   
   getItems(){
+    if(!this.firebaseService.IsMaterialsInLocalStorage()){
     this.firebaseService.getMaterialsObservable();
+    }
     this.materialArrStorage = JSON.parse(localStorage.getItem('materials')) as IMaterial[];
   }
 
@@ -127,7 +126,11 @@ export class ProductMaterialComponent implements OnInit {
   }
 
   getCategories(){
-    this.firebaseService.getCategories();
+
+    if(!this.firebaseService.IsCategoriesInLocalStorage())
+    {
+      this.firebaseService.getCategories();
+    }
     this.category$ = this.firebaseService.categories$;
 
     this.category$.subscribe((categories)=>{
@@ -162,18 +165,7 @@ this.productMatForm.patchValue({total  :  calculatedTotal});
   }
 
   submitForm(){
-    // for (let el in this.productMatForm.controls) {
-    //   if (this.productMatForm.controls[el].errors) {
-    //     console.log(el)
-    //   }
- //}    
-    //if(!this.productMatForm.valid){
-      //this.spinnerService.sendClickEvent(this.productMissingMessage);
-      //return;
-   // }
-    
-
-
+   
     this.currentitem= {
       quantity: this.productMatForm.get('quantity').value,
       remarks:this.productMatForm.get('remarks').value,

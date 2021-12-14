@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { retry } from 'rxjs-compat/operator/retry';
 import { map, shareReplay } from 'rxjs/internal/operators';
 import {ICategory} from '../core/models/category'
 import {IMaterial} from '../core/models/material'
@@ -57,7 +58,7 @@ export class FireBaseService {
 
   getMaterials(){
     return this.firestore.collection('material').snapshotChanges().pipe(
-      shareReplay()
+      
     );
     }
 
@@ -167,8 +168,9 @@ return this.firestore.collection('material').ref.get().then((querySnapshot)=>{
         this.subjectProduct.next(data);
       }
 
-    async getCategories(){
+    async getCategories(): Promise<ICategory[]>{
 
+      
      const querySnapshot = await this.firestore.collection('category').ref.get();
       const data: ICategory[] = [];
       querySnapshot.forEach((doc) => {
@@ -180,87 +182,8 @@ return this.firestore.collection('material').ref.get().then((querySnapshot)=>{
       });
       this.subject.next(data);
       localStorage.setItem('categories', JSON.stringify(data));
-      
-
-
-      /*
-
-  getMaterials = () =>   {  
-   this.spinnerService.display(true);
-      this.firebaseService
-      .getMaterials()
-      .subscribe(res =>( 
-      this.dataSource=res, 
-        console.log(res),
-        this.spinnerService.display(false),
-        shareReplay()
-        
-        ))
-        console.log("materialList: "+ this.materialList);
-      };
-
-
-
-
-
-fetchMechanics() {
-
-  return this.firestore
-    .collection("users")
-    .ref
-    .where("isMechanic", "==", false)
-    .get().then((querySnapshot) => {
-        const data: UserData[] = [];
-        querySnapshot.forEach((doc) => {
-            data.push(doc.data() as UserData);
-            console.log(doc.id, " => ", doc.data());
-        });
-        this._mechanics.next(data)
-    });
-      */
+      return data;
     }
-
- 
-
-    
- 
-  
-/*
-fetchMechanics() {
-
-  return this.firestore
-    .collection("users")
-    .ref
-    .where("isMechanic", "==", false)
-    .get().then((querySnapshot) => {
-        const data: UserData[] = [];
-        querySnapshot.forEach((doc) => {
-            data.push(doc.data() as UserData);
-            console.log(doc.id, " => ", doc.data());
-        });
-        this._mechanics.next(data)
-    });
-
-}
-
-*/
-
-
-    /*
-  loadItems() {
-    this.firestore.collection('People', ref => ref
-      .limit(5)
-      .orderBy('timestamp', 'desc')
-    ).snapshotChanges()
-      .subscribe(response => {
-        ...
-        ...
-      }, error => {
-      });
-  }
-
-    */
-  
 
   addCategory(payload: ICategory)
   {
@@ -326,6 +249,32 @@ fetchMechanics() {
   {
     //return  this.firestore.doc('material/' + id).get()
  
+  }
+
+  IsCategoriesInLocalStorage():boolean{
+    let num: number;
+    let cat = JSON.parse(localStorage.getItem('categories')) as ICategory[];
+    this.categories$ = of(cat);
+    this.categories$.subscribe(result => {
+      num= result.length });
+
+      if(num>0) return true;
+      else return false;
+  }
+
+
+  IsMaterialsInLocalStorage():boolean{
+    let num: number;
+    let mat  = JSON.parse(localStorage.getItem('materials')) as IMaterial[];
+    this.materials$ = of(mat);
+    this.materials$.subscribe(result => {
+      num = result.length
+    });
+    
+    if(num>0) return true;
+    else return false;
+
+    
   }
 }
 

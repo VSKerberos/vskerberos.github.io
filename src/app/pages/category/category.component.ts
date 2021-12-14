@@ -1,10 +1,13 @@
+import { selectAllCategories } from './category.selector';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { select, Store } from '@ngrx/store';
 import { Observable, of, pipe } from 'rxjs';
 import { filter, map, max, mergeMap, scan, tap } from 'rxjs/internal/operators';
 import { ICategory } from 'src/app/core/core/models/category';
 import { FireBaseService } from 'src/app/core/services/fire-base.service';
+import { AppState } from 'src/app/reducers';
 import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
@@ -24,18 +27,24 @@ export class CategoryComponent implements OnInit {
   result;
   constructor(    private firebaseService: FireBaseService,
                 public fb: FormBuilder,
-                private dialog: MatDialog) {
+                private dialog: MatDialog,
+                private store: Store<AppState>) {
     this.reactiveForm();
   }
 
   ngOnInit(): void {
 this.getItems();
+
+
   }
 
   getItems(){
-    this.firebaseService.getCategories();
-    this.categories$ = this.firebaseService.categories$;
-   
+ if(!this.firebaseService.IsCategoriesInLocalStorage())
+{
+  this.firebaseService.getCategories();
+} 
+    
+  this.categories$ = this.firebaseService.categories$;
     this.categories$ = this.categories$.pipe(map((data) => {
       data.sort(this.sortByTitle)
       return data;

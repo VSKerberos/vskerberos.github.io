@@ -33,7 +33,10 @@ export class ProductListComponent implements OnInit {
 
 
   getItems(){
+    if(!this.firebaseService.IsMaterialsInLocalStorage()){
     this.firebaseService.getMaterialsObservable();
+    }
+    
     this.firebaseService.getProducts();
     this.products$ = this.firebaseService.products$;
    

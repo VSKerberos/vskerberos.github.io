@@ -5,6 +5,7 @@ import { FireBaseService } from 'src/app/core/services/fire-base.service';
 import { ICategory } from 'src/app/core/core/models/category';
 import { ErrorStateMatcher } from '@angular/material/core';
 import {IMaterial} from '../../../core/core/models/material'
+import { of } from 'rxjs';
 
 
 @Component({
@@ -142,7 +143,12 @@ export class MaterialEntryComponent implements OnInit {
   }
 
   getCategories(){
-    this.firebaseService.getCategories();
+
+    if(!this.firebaseService.IsCategoriesInLocalStorage())
+    {
+      this.firebaseService.getCategories();
+    } 
+    
     this.firebaseService.categories$.subscribe((categories)=> {
       this.categoryArr = categories as ICategory[]
   });

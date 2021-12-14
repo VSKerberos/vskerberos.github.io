@@ -9809,7 +9809,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var src_app_core_spinner_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/core/spinner.service */ 61736);
 /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/material/dialog */ 44958);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/router */ 13252);
-/* harmony import */ var _angular_flex_layout_flex__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/flex-layout/flex */ 88669);
+/* harmony import */ var _angular_flex_layout_flex__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/flex-layout/flex */ 39057);
 /* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material/table */ 98536);
 /* harmony import */ var _angular_material_button__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/material/button */ 96695);
 /* harmony import */ var _angular_material_tooltip__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/material/tooltip */ 14415);
@@ -10186,8 +10186,8 @@ let ProductMaterialComponent = /*#__PURE__*/(() => {
 
     ngOnInit() {
       this.reactiveForm();
-      this.getItems();
-      this.getCategories();
+      this.getItems(); // this.getCategories();
+
       this.categoryOptions = this.groupControl.valueChanges.pipe((0,rxjs_internal_operators__WEBPACK_IMPORTED_MODULE_6__.startWith)(''), (0,rxjs_internal_operators__WEBPACK_IMPORTED_MODULE_6__.map)(value => this._filterGroup(value)));
       this.searchMaterialOptions();
     }

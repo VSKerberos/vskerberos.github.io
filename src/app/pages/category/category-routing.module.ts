@@ -9,9 +9,8 @@ const routes: Routes = [{
   component:LayoutComponent,
   children:[
     {path:'', component:CategoryComponent,
-    resolve: {
-      categories: CategoriesResolver
-    } }
+    resolve: [CategoriesResolver]
+     }
   ]
 
 }];

@@ -10,6 +10,9 @@ import { environment } from '../environments/environment';
 import {metaReducers, reducers} from './reducers';
 import {AuthModule} from '../app/pages/auth/auth.module';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { EffectsModule } from '@ngrx/effects';
+import { EntityDataModule } from '@ngrx/data';
+import { entityConfig } from './entity-metadata';
 
 @NgModule({
   declarations: [
@@ -23,10 +26,11 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
     AuthModule.forRoot(),
     HttpClientModule,
     StoreModule.forRoot( reducers, {metaReducers}),
-    
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    
-    StoreRouterConnectingModule.forRoot()
+    EffectsModule.forRoot([]),
+    EntityDataModule.forRoot({}),
+    StoreRouterConnectingModule.forRoot(),
+    EntityDataModule.forRoot(entityConfig)
     
   ],
   providers: [],
