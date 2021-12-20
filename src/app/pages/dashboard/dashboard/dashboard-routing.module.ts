@@ -11,10 +11,12 @@ const routes: Routes = [
     path:'',
     component: LayoutComponent,
     canActivate: [AuthGuard],
+    resolve: [CategoriesResolver],
     
     children: [
       {
         path:'', component:DashboardHomeComponent
+       
         
       }
       

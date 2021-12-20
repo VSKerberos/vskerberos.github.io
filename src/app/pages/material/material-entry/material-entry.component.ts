@@ -59,9 +59,6 @@ export class MaterialEntryComponent implements OnInit {
         const stringDate: string = `${this.mystartDate.getDate()}/${this.mystartDate.getMonth()+1}/${this.mystartDate.getFullYear()}`;
       
       }
-
-      //data.material.payload.doc.data().name
-      
      }
 
   ngOnInit(): void {

@@ -35,12 +35,12 @@ export class MaterialComponent implements OnInit {
 
   ngOnInit(): void {
     
-    this.getItems();
+    this.getItems(false);
     this.filterCategories();
   }
 
-  getItems(){
-    if(!this.firebaseService.IsMaterialsInLocalStorage())
+  getItems(skipped:boolean){
+    if(!this.firebaseService.IsMaterialsInLocalStorage()  || skipped)
     {this.firebaseService.getMaterialsObservable(); }
 
     this.materials$ = this.firebaseService.materials$;
@@ -78,7 +78,7 @@ sortByGroupCode(a,b) {
 
   deleteRecord(id: any){
     this.firebaseService.deleteMaterial(id);
-    this.getItems();
+    this.getItems(true);
   }
 
 
@@ -99,7 +99,7 @@ sortByGroupCode(a,b) {
       .subscribe();
 
       this.dialog.afterAllClosed.subscribe(result => {
-        this.getItems()
+        this.getItems(true)
       });
 
 }
@@ -118,7 +118,7 @@ addMaterial(){
 
 
       this.dialog.afterAllClosed.subscribe(result => {
-        this.getItems()
+        this.getItems(true);
       });
 }
   

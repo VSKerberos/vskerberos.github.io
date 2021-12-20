@@ -8,8 +8,8 @@ const routes: Routes = [{
   path:'',
   component:LayoutComponent,
   children:[
-    {path:'', component:CategoryComponent,
-    resolve: [CategoriesResolver]
+    {path:'', component:CategoryComponent
+
      }
   ]
 

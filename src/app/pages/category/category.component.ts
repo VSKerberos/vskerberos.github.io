@@ -39,12 +39,15 @@ this.getItems();
   }
 
   getItems(){
- if(!this.firebaseService.IsCategoriesInLocalStorage())
-{
-  this.firebaseService.getCategories();
-} 
+
+  this.categories$ =  this.store.pipe(select(selectAllCategories))
+
+//  if(!this.firebaseService.IsCategoriesInLocalStorage())
+// {
+//   this.firebaseService.getCategories();
+// } 
     
-  this.categories$ = this.firebaseService.categories$;
+//   this.categories$ = this.firebaseService.categories$;
     this.categories$ = this.categories$.pipe(map((data) => {
       data.sort(this.sortByTitle)
       return data;
