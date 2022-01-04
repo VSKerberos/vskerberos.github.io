@@ -1,3 +1,4 @@
+import { UtilityService } from 'src/app/core/services/utility.service';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
@@ -24,7 +25,8 @@ export class LoginComponent implements OnInit {
       private fb:FormBuilder,
       private auth: AuthService,
       private router:Router,
-      private store: Store<AppState>) {
+      private store: Store<AppState>,
+      private util:UtilityService) {
 
       this.form = fb.group({
           email: ['', [Validators.required]],
@@ -40,36 +42,18 @@ export class LoginComponent implements OnInit {
 
   login() {
 
-  //  this.router.navigateByUrl('/dashboard');
       const val = this.form.value;
 
       let user =this.auth.login(val.email, val.password);
       if(user.valid){
           this.store.dispatch(login({user}));
-
+          this.util.removeItemFromLocalStorage();
           this.router.navigateByUrl('/dashboard');
         } else {
             alert('Hatalı Kulalnıcı adı veya Şifre');
             this.form.reset();
         }
-        //   .pipe(
-        //       tap(user => {
-
-        //           console.log(user);
-
-        //           this.store.dispatch(login({user}));
-
-        //           this.router.navigateByUrl('/dashboard');
-
-        //       })
-        //   )
-        //   .subscribe(
-        //       noop,
-        //       () => alert('Login Failed')
-        //   );
-
-
-
+     
   }
 
 }

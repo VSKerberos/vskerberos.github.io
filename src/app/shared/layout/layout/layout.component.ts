@@ -69,6 +69,7 @@ logout() {
 
   this.store.dispatch(logout());
   this.router.navigateByUrl('/auth');
+  localStorage.clear();
 }
 
 

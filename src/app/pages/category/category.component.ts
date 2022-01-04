@@ -1,5 +1,7 @@
+import { UtilityService } from 'src/app/core/services/utility.service';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { selectAllCategories } from './category.selector';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
@@ -9,6 +11,8 @@ import { ICategory } from 'src/app/core/core/models/category';
 import { FireBaseService } from 'src/app/core/services/fire-base.service';
 import { AppState } from 'src/app/reducers';
 import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
+import { MatTable } from '@angular/material/table';
+import { SpinnerService } from 'src/app/core/spinner.service';
 
 @Component({
   selector: 'app-category',
@@ -23,32 +27,37 @@ export class CategoryComponent implements OnInit {
    updatedRecord:ICategory;
    displayedColumns: string[] = ['position', 'name','demo-actions'];
    mode: 'create' | 'update';
+   localstorageMode:'create' | 'update' | 'delete';
   dataSource;
   result;
+  categorySaveMessage:string ='Kategori Başarılı bir şeklide eklenmiştir.';
+  categoryDeleteMessage:string ='Kategori Başarılı bir şeklide silinmiştir.'
+  categoryUpdateMessage:string ='Kategori Başarılı bir şeklide güncellenmiştir.'
+  deletedRecordId:string;
+  @ViewChild(MatTable) table: MatTable<any>;
   constructor(    private firebaseService: FireBaseService,
                 public fb: FormBuilder,
                 private dialog: MatDialog,
-                private store: Store<AppState>) {
+                private store: Store<AppState>,
+                private firestore: AngularFirestore,
+                private spinnerService: SpinnerService,
+                private utilService:UtilityService) {
     this.reactiveForm();
   }
 
   ngOnInit(): void {
-this.getItems();
-
-
+    this.mode ='create';
+    this.getItems();
   }
 
   getItems(){
-
-  this.categories$ =  this.store.pipe(select(selectAllCategories))
-
-//  if(!this.firebaseService.IsCategoriesInLocalStorage())
-// {
-//   this.firebaseService.getCategories();
-// } 
+ if(!this.firebaseService.IsCategoriesInLocalStorage())
+{
+  this.firebaseService.getCategories();
+} 
     
-//   this.categories$ = this.firebaseService.categories$;
-    this.categories$ = this.categories$.pipe(map((data) => {
+      this.categories$ = this.firebaseService.categories$;
+      this.categories$ = this.categories$.pipe(map((data) => {
       data.sort(this.sortByTitle)
       return data;
       }));
@@ -64,37 +73,45 @@ this.getItems();
   }
 
   submitForm(){
+    this.spinnerService.display(true);
     
 if(this.mode == 'create'){
   this.localCategory =  {
     categoryid : this.getMaxCategoryId(),
     title : this.categoryForm.controls['title'].value,remarks:''
-
   };
+  
+    this.firestore.collection('category').add(this.localCategory).then(response =>{
+      console.log("add item console:"+ response.id);
+      this.localCategory.id = response.id;
+      /////
+      this.spinnerService.sendClickEvent(this.categorySaveMessage);
+      this.localStorageOperation('create',this.localCategory);
+      this.generalOperationAfterCrud();
+    }).catch(error=>{
+      console.log("add item error:"+error)
+    });
 
-    this.firebaseService.addCategory(this.localCategory).catch(error =>{
-           console.log(error);
-         });
+
 } else{
   this.localCategory =  {
     categoryid : this.updatedRecord.categoryid,
     title : this.categoryForm.controls['title'].value,remarks:''
 
   };
-this.firebaseService.updateCategory(this.localCategory,this.updatedRecord.id).catch(
+this.firebaseService.updateCategory(this.localCategory,this.updatedRecord.id).then(response=>{
+this.localCategory.id = this.updatedRecord.id;
+this.spinnerService.sendClickEvent(this.categoryUpdateMessage);
+this.localStorageOperation('update',this.localCategory);
+  this.generalOperationAfterCrud();
+}).catch(
   (error)=>{
     console.log(error);
   }
 );
 }
 
-    this.categoryForm.reset();
-    this.categoryForm.markAsPristine();
-    this.categoryForm.markAsUntouched();
-    this.localCategory = null;
-    this.mode ='create';
-    this.updatedRecord=null;
-    this.getItems();
+this.spinnerService.display(false);
   }
 
   cancel() {
@@ -116,6 +133,8 @@ this.firebaseService.updateCategory(this.localCategory,this.updatedRecord.id).ca
 
   deleteRecord(id: any){
     console.log('Deleted recor is: '+ id);
+    this.deletedRecordId = id;
+    
     const confirmDialog = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title:'Category Silme Doğrulama',
@@ -126,13 +145,30 @@ this.firebaseService.updateCategory(this.localCategory,this.updatedRecord.id).ca
     confirmDialog.afterClosed().subscribe(result =>{
       if(result === true)
       {
+        this.localCategory = {
+          id : id,
+          remarks:'',
+          categoryid:999,
+          title:''
+        };
+
+      this.localStorageOperation('delete',this.localCategory);
       this.firebaseService.deleteCategorie(id);
       this.mode ='create';   
-      this.getItems();
+     // this.generalOperationAfterCrud();
+     this.removeItemFromObservable(this.deletedRecordId);
+      this.spinnerService.sendClickEvent(this.categoryDeleteMessage);
+      this.dataSource = this.categories$;
+      this.localCategory = null;
+      this.table.renderRows();
       }
     })
+  }
 
- 
+  removeItemFromObservable(id) {
+    this.categories$ = this.categories$.pipe(map(data => {
+      return data.filter(item => item.id != id)
+    }))
   }
 
   updateRecord(element:ICategory){
@@ -145,6 +181,58 @@ this.firebaseService.updateCategory(this.localCategory,this.updatedRecord.id).ca
     if (b.title > a.title) return -1;
       if (b.title < a.title) return 1;
       return 0;
+  }
+
+  generalOperationAfterCrud(){
+    this.categoryForm.reset();
+    this.categoryForm.markAsPristine();
+    this.categoryForm.markAsUntouched();
+   
+    this.mode ='create';
+    this.updatedRecord=null;
+
+    this.categories$.subscribe(
+      userlist => {
+        userlist.push(this.localCategory)
+      }
+    );
+    this.dataSource = this.categories$;
+    this.localCategory = null;
+    this.table.renderRows();
+    
+  }
+
+  localStorageOperation(expr:string,item:ICategory)
+  {
+   let localItems = JSON.parse(localStorage.getItem('categories')) as ICategory[];
+
+    switch (expr) {
+      case 'update':
+      
+      localItems.find(x=>x.id == item.id).title = item.title;
+
+      let objIndex = localItems.findIndex((obj => obj.id == item.id));
+
+
+      localItems[objIndex].title = item.title;
+
+        break;
+      case 'delete':
+        item= localItems.find(x=>x.id == item.id);
+        let index= localItems.findIndex(x=> x == item);
+        localItems.splice(index,1);
+      break;
+      case 'create':
+        
+      localItems.push(item);
+        break;
+      default:
+        console.log(`Sorry, we are out of ${expr}.`);
+    }
+    this.utilService.removeItemFromLocalStorage();
+    localStorage.setItem('categories', JSON.stringify(localItems));
+    
+    
   }
 
 

@@ -1,9 +1,9 @@
+import { ICategory } from 'src/app/core/core/models/category';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { retry } from 'rxjs-compat/operator/retry';
 import { map, shareReplay } from 'rxjs/internal/operators';
-import {ICategory} from '../core/models/category'
 import {IMaterial} from '../core/models/material'
 import { IProduct, IProductMat, IProductMaterial } from '../core/models/product';
 
@@ -170,7 +170,6 @@ return this.firestore.collection('material').ref.get().then((querySnapshot)=>{
 
     async getCategories(): Promise<ICategory[]>{
 
-      
      const querySnapshot = await this.firestore.collection('category').ref.get();
       const data: ICategory[] = [];
       querySnapshot.forEach((doc) => {
@@ -185,10 +184,13 @@ return this.firestore.collection('material').ref.get().then((querySnapshot)=>{
       return data;
     }
 
-  addCategory(payload: ICategory)
+
+
+  addCategory(payload: ICategory):Promise<any>
   {
     return this.firestore.collection('category').add(payload).then(response =>{
       console.log("add item console:"+ response.id);
+      
     }).catch(error=>{
       console.log("add item error:"+error)
     });
@@ -198,6 +200,35 @@ return this.firestore.collection('material').ref.get().then((querySnapshot)=>{
 
   return  this.firestore.doc('category/' + id).update(data);
  }
+
+ getlastInsertedCategoryRecord(){
+  const data: ICategory[] = []
+  let data1: ICategory;
+  let lastrecord = this.firestore.collection<ICategory>('category', ref => ref.orderBy('categoryid', 'desc').limit(1)).snapshotChanges();
+
+  
+
+let c = lastrecord
+  .subscribe((data) => {
+    const myArray = [];
+    data.forEach((doc) => {
+      const y = doc.payload.doc.data() as ICategory;
+      const docId = doc.payload.doc.id;
+      data1  = y;
+      data1.id = docId;
+      
+      return {docId,...y};
+    });
+    
+  });
+
+  
+
+  console.log(` data1 is: ${data}`)
+
+ 
+ }
+
 
   addMaterial(payload: IMaterial)
   {
@@ -254,23 +285,27 @@ return this.firestore.collection('material').ref.get().then((querySnapshot)=>{
   IsCategoriesInLocalStorage():boolean{
     let num: number;
     let cat = JSON.parse(localStorage.getItem('categories')) as ICategory[];
+    if(cat && cat.length>0){
     this.categories$ = of(cat);
     this.categories$.subscribe(result => {
-      num= result.length });
+      num= result.length ?? 0 });
 
       if(num>0) return true;
       else return false;
+    }
+    return false;
   }
 
 
   IsMaterialsInLocalStorage():boolean{
     let num: number;
     let mat  = JSON.parse(localStorage.getItem('materials')) as IMaterial[];
+    if(mat && mat.length>0){
     this.materials$ = of(mat);
     this.materials$.subscribe(result => {
       num = result.length
     });
-    
+  }
     if(num>0) return true;
     else return false;
 

@@ -13,6 +13,13 @@ export class UtilityService {
     return item.replace(',','.');
   }
 
+  removeItemFromLocalStorage(){
+    localStorage.removeItem('categories');
+    localStorage.removeItem('materials');
+
+ 
+  }
+
 
   
 
