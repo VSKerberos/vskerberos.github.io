@@ -40,9 +40,11 @@ export class ProductDetailComponent implements OnInit {
 
     this.cloned.forEach(x=>{
       let currenmaterial =this.getMaterialItem(x.materialid);
+      if(currenmaterial){
       x.materialdate= currenmaterial.operationdate ?? '';
       x.unitprice = currenmaterial.price;
       x.total= math.round(math.multiply(Number(this.utility.replaceCommaToDot(currenmaterial.price)) , Number(x.quantity)),2) ;
+      }
     })
 
     this.totalCost = math.format(this.getTotalCost(), 5);  
