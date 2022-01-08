@@ -1,3 +1,4 @@
+import { ProductSearchComponent } from './../product-search/product-search.component';
 import { Component, Inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IProduct, IProductMat, IProductMaterial } from 'src/app/core/core/models/product';
@@ -7,7 +8,7 @@ import { Router } from '@angular/router';
 import { IMaterial } from 'src/app/core/core/models/material';
 import * as math from 'mathjs';
 import { UtilityService } from 'src/app/core/services/utility.service';
-import { defaultDialogConfig } from '../../material/default-dialog-config';
+import { defaultDialogConfig, smallDialogConfig } from '../../material/default-dialog-config';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductMaterialComponent } from '../product-material/product-material.component';
 import { SpinnerService } from 'src/app/core/spinner.service';
@@ -172,33 +173,6 @@ dialogRef.afterClosed().subscribe(result => {
    
 });
 
-  // const dialogConfig = defaultDialogConfig();
-
-  // dialogConfig.data = {
-  //   dialogTitle:"Malzeme Güncelleme",
-  //   material,
-  //   mode: 'update',
-  //   recordId:material.id
-    
-  // };
-
-  // const dialogConfig = defaultDialogConfig();
-
-  // dialogConfig.data = {
-  //   dialogTitle:"Malzeme Güncelleme",
-  //   mode: 'update',
-  //   material
-  // };
-
-  // this.dialog.open(ProductMaterialComponent, dialogConfig)
-  //   .afterClosed()
-  //   .subscribe(); 
-
-
-  //   this.dialog.afterAllClosed.subscribe(result => {
-  //     this.getItems()
-  //   });
-
 
 
 }
@@ -220,6 +194,36 @@ addMaterial(){
       this.dialog.afterAllClosed.subscribe(result => {
         this.getItems()
       });
+}
+
+addSubProduct(){
+const productDialogConfig = smallDialogConfig();
+productDialogConfig.data = {
+  dialogTitle:"Alt Ürün  Ekleme",
+  mode: 'create'
+};
+
+this.dialog.open(ProductSearchComponent, productDialogConfig)
+.afterClosed()
+.subscribe(result=>{
+  console.log(`ProductSearchComponent aftrer close`);
+  let currentProductMaterial = this.firebaseService.localdata.map(x => Object.assign({}, x));
+
+  currentProductMaterial.forEach(x=>{
+    let currenmaterial =this.getMaterialItem(x.materialid);
+    x.materialdate= currenmaterial.operationdate ?? '';
+    x.unitprice = currenmaterial.price;
+    x.total= math.round(math.multiply(Number(this.utility.replaceCommaToDot(currenmaterial.price)) , Number(x.quantity)),2) ;
+  })
+
+  currentProductMaterial.forEach(y=>{
+    this.productDetail.push(y);
+  })
+
+  this.totalCost = math.format(this.getTotalCost(),5);
+  this.firebaseService.clearProductDetail();
+}); 
+
 }
 
 onClose() {

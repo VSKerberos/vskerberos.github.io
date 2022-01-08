@@ -1,0 +1,34 @@
+<div class="cover"></div>
+<form class="example-form">
+
+    <mat-card class="example-card">
+        <mat-card-subtitle>Alt Ürün Ekleme Ekranı</mat-card-subtitle>
+        <mat-card-title>Alt Ürün Seçiniz </mat-card-title>
+        <mat-card-content>
+            <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                <mat-label>Alt Ürün</mat-label>
+                <input type="text" placeholder="Alt ürün kodunu giriniz" aria-label="Text" matInput [formControl]="productControl" [matAutocomplete]="auto1">
+                <mat-autocomplete autoActiveFirstOption #auto1="matAutocomplete" (optionSelected)="onGroupSelectedChanged($event)" [displayWith]="displayGroupFn.bind(this)">
+                    <mat-option *ngFor="let product of productOptions | async" [value]="product">
+                        {{product.name}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </mat-card-content>
+        <mat-divider inset></mat-divider>
+        <mat-card-actions>
+
+        </mat-card-actions>
+        <mat-card-footer>
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </mat-card-footer>
+    </mat-card>
+
+
+
+</form>
+<div class="row">
+    <button color="secondary" (click)="onClose()" mat-raised-button>
+        Kapat
+    </button>
+</div>

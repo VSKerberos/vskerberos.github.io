@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, LOCALE_ID } from '@angular/core';
 import { FireBaseService } from './fire-base.service';
 
 @Injectable({
@@ -16,9 +16,8 @@ export class UtilityService {
   removeItemFromLocalStorage(){
     localStorage.removeItem('categories');
     localStorage.removeItem('materials');
-
- 
-  }
+    localStorage.removeItem('products');
+ }
 
 
   

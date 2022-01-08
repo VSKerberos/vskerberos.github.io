@@ -32,10 +32,18 @@
                 <div class="row">
 
                     <div class="demo-button-container space-left">
-                        <button mat-fab color="primary" (click)="addMaterial()" aria-label="Example icon button with a delete icon">
-                        <mat-icon>add</mat-icon>
-                        </button>
+                        <button mat-raised-button color="primary" (click)="addMaterial()" aria-label="Example icon button with a delete icon">
+                        <mat-icon>add</mat-icon> Malzeme ekle
+                        </button> &nbsp;
+                        <button mat-raised-button color="warn" (click)="addSubProduct()" aria-label="Example icon button with a delete icon">
+                            <mat-icon>add</mat-icon>Alt ürün ekle
+                            </button>
                     </div>
+
+                    <div class="demo-button-container space-left">
+
+                    </div>
+
                 </div>
             </mat-card-content>
 

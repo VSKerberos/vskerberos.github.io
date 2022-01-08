@@ -111,49 +111,10 @@ export class FireBaseService {
           }
         });
        
+      }
 
-        /*
-     const local = doc.data() as IMaterial;
-          const id = doc.id;
-          data.push({id,...local} as IMaterial);
-        */
-       
-       
-
-
-       /*
- const local = doc.data() as IProduct;
-          const id = doc.id;
-          data.push({id,...local} as IProduct);
-
-       */
-
-  //      this.firestore  doc.data() ["productMaterial"]
-  // .collection("productmaterial", (ref) => ref.where("id", "==", data))
-  // .snapshotChanges()
-  // .subscribe((data) => {
-  //   const myArray = [];
-  //   data.forEach((doc) => {
-  //     const y = doc.payload.doc.data()["altUID"];
-  //     console.log(y);
-  //     myArray.push(y);
-  //   });
-  //   console.log(myArray);
-  // });
-
-       /*
-return this.firestore.collection('material').ref.get().then((querySnapshot)=>{
-        const data: IMaterial[] =[];
-        querySnapshot.forEach((doc)=> {
-          const local = doc.data() as IMaterial;
-          const id = doc.id;
-          data.push({id,...local} as IMaterial);
-        });
-        this.subjectMaterial.next(data);
-        localStorage.setItem('materials', JSON.stringify(data));
-      });
-       */
-    
+      clearProductDetail(){
+        this.localdata =[];
       }
 
 
@@ -166,6 +127,7 @@ return this.firestore.collection('material').ref.get().then((querySnapshot)=>{
           data.push({id,...local} as IProduct);
         });
         this.subjectProduct.next(data);
+        localStorage.setItem('products',JSON.stringify(data));
       }
 
     async getCategories(): Promise<ICategory[]>{
@@ -251,10 +213,7 @@ let c = lastrecord
   return  this.firestore.doc('material/' + id).update(data);
  }
   
-  getMaterialsWitId(){
-    
-
-  }
+ 
 
   addProduct(mainproduct,productrelation:IProductMat){
     return this.firestore.collection('product').add(mainproduct).then(response =>{
@@ -273,13 +232,6 @@ let c = lastrecord
       console.log("add item error:"+error)
     });
 
-  }
-
-
-  getbyfield()
-  {
-    //return  this.firestore.doc('material/' + id).get()
- 
   }
 
   IsCategoriesInLocalStorage():boolean{
@@ -308,8 +260,20 @@ let c = lastrecord
   }
     if(num>0) return true;
     else return false;
+  }
 
-    
+  IsProductsInLocalStorage():boolean{
+
+    let num:number;
+    let product = JSON.parse(localStorage.getItem('products')) as IProduct[];
+    if(product && product.length>0){
+      this.products$ = of(product);
+      this.products$.subscribe(result => {
+        num = result.length
+      });
+    }
+      if(num>0) return true;
+      else return false;
   }
 }
 

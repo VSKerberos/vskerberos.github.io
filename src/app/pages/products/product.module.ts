@@ -7,6 +7,7 @@ import { ProductMaterialComponent } from './product-material/product-material.co
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ProductUpdateComponent } from './product-update/product-update.component';
+import { ProductSearchComponent } from './product-search/product-search.component';
 
 
 
@@ -17,7 +18,8 @@ import { ProductUpdateComponent } from './product-update/product-update.componen
     ProductMaterialComponent,
     ProductListComponent,
     ProductDetailComponent,
-    ProductUpdateComponent
+    ProductUpdateComponent,
+    ProductSearchComponent
   ],
   imports: [
     CommonModule,
