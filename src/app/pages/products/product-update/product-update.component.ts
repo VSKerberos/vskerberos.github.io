@@ -89,9 +89,11 @@ export class ProductUpdateComponent implements OnInit {
   setProductMaterial(){
     this.productMaterial.forEach(x=>{
       let currenmaterial =this.getMaterialItem(x.materialid);
+      if(currenmaterial){
       x.materialdate= currenmaterial.operationdate ?? '';
       x.unitprice = currenmaterial.price;
-      x.total= math.round(math.multiply(Number(this.utility.replaceCommaToDot(currenmaterial.price)) , Number(x.quantity)),2) ;
+      x.total= math.round(math.multiply(Number(this.utility.replaceCommaToDot(currenmaterial.price)) , Number(x.quantity)),2);
+      }
     })
 
     this.totalCost = math.format(this.getTotalCost(),5);
@@ -211,9 +213,11 @@ this.dialog.open(ProductSearchComponent, productDialogConfig)
 
   currentProductMaterial.forEach(x=>{
     let currenmaterial =this.getMaterialItem(x.materialid);
+    if(currenmaterial){
     x.materialdate= currenmaterial.operationdate ?? '';
     x.unitprice = currenmaterial.price;
     x.total= math.round(math.multiply(Number(this.utility.replaceCommaToDot(currenmaterial.price)) , Number(x.quantity)),2) ;
+    }
   })
 
   currentProductMaterial.forEach(y=>{
