@@ -12,7 +12,11 @@
 
 
     <mat-card-content>
-        <p></p>
+        <p>
+            <button mat-icon-button aria-label="Example icon button with a vertical three dot icon" printSectionId="print-section" [useExistingCss]="true" ngxPrint matTooltip="Ürünü yazdır" matTooltipClass="example-tooltip-red" aria-label="Button that shows a red tooltip">
+                <mat-icon>print</mat-icon>
+              </button>
+        </p>
 
         <div class="container" *ngIf="this.productDetail.length>0">
             <table class="responsive-table">
@@ -69,3 +73,53 @@
         <!-- <mat-progress-bar mode="indeterminate"></mat-progress-bar> -->
     </mat-card-footer>
 </mat-card>
+
+<div id="print-section" style="display: none;">
+    <h3>
+        <p> Ürün Adı: {{ this.selectedProduct.name}}
+        </p>
+    </h3>
+    <h3>
+        <p> Ürün Kodu: {{ this.selectedProduct.code}} </p>
+    </h3>
+    <div class="container" *ngIf="this.productDetail.length>0">
+        <table class="responsive-table">
+            <caption>Ürüne ait malzemeler</caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="bold-header"> Grup Adı</th>
+                    <th scope="col" class="bold-header">Malzeme Adı</th>
+                    <th scope="col" class="bold-header">Miktar</th>
+                    <th scope="col" class="bold-header">Birim</th>
+                    <th scope="col" class="bold-header">Birim Fiyat</th>
+                    <th scope="col" class="bold-header">Açıklama</th>
+                    <th scope="col" class="bold-header">Fiyat Giriş Tarihi</th>
+                    <th scope="col" class="bold-header">Toplam</th>
+
+
+
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <td colspan="7"></td>
+                    <td style="text-align: right;font-weight: bold;color: black">Toplam Tutar: {{this.totalCost}} </td>
+                </tr>
+            </tfoot>
+            <tbody>
+                <tr *ngFor="let mat of productDetail">
+                    <th scope="row">{{mat.categoryname}}</th>
+                    <th scope="row">{{mat.materialname}}</th>
+                    <td data-title="Released">{{mat.quantity}}</td>
+                    <td data-title="Released">{{mat.unit}}</td>
+                    <td data-title="Studio">{{mat.unitprice}}</td>
+                    <td data-title="Domestic Gross" data-type="currency">{{mat.remarks}}</td>
+                    <td data-title="Studio">{{mat.materialdate}}</td>
+                    <td data-title="International Gross" data-type="currency"> {{mat.total}} </td>
+
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>

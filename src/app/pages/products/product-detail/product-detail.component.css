@@ -288,3 +288,8 @@ a:focus {
     font-size: large;
     font-weight: bold;
 }
+
+.bold-header {
+    font-weight: bold;
+    color: black
+}
