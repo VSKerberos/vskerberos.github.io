@@ -11,6 +11,7 @@ import {IMaterial} from '../../core/core/models/material'
 import { ICategory } from 'src/app/core/core/models/category';
 import { MatTable } from '@angular/material/table';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 
 @Component({
@@ -20,7 +21,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 })
 export class MaterialComponent implements OnInit {
 
-  
+
   materialList: any;
   displayedColumns: string[] = [ 'demo-weight','demo-name', 'demo-unit','demo-symbol', 'demo-dimension','demo-remarks','demo-actions'];
   dataSource;
@@ -28,18 +29,16 @@ export class MaterialComponent implements OnInit {
   materialArr:IMaterial[];
   categories:ICategory[]
   filteredMaterialArr:IMaterial[];
-  @ViewChild(MatTable) table: MatTable<any>;  
+  @ViewChild(MatTable) table: MatTable<any>;
   materialDeleteMessage:string ="Malzeme Başarı ile Silinmiştir."
-  
-  
   constructor(
-    private firebaseService: FireBaseService, 
+    private firebaseService: FireBaseService,
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
     private firestore: AngularFirestore) { }
 
   ngOnInit(): void {
-    
+
     this.filterCategories();
     this.getItems();
   }
@@ -91,7 +90,7 @@ sortByGroupCode(a,b) {
     this.removeItemFromObservable(element.id);
     this.removeItemFromLocalStorage(element);
     this.getArrayFromObservable();
-    this.filteredMaterialArr = this.materialArr.filter(XX=>XX.groupcode ==element.groupcode).sort(this.sortByGroupText); 
+    this.filteredMaterialArr = this.materialArr.filter(XX=>XX.groupcode ==element.groupcode).sort(this.sortByGroupText);
     this.spinnerService.sendClickEvent(this.materialDeleteMessage);
     this.dataSource = this.materials$;
     this.table.renderRows();
@@ -107,7 +106,7 @@ sortByGroupCode(a,b) {
       material,
       mode: 'update',
       recordId:material.id
-      
+
     };
 
     this.dialog.open(MaterialEntryComponent, dialogConfig)
@@ -132,7 +131,7 @@ sortByGroupCode(a,b) {
 
 addMaterial(){
   const dialogConfig = defaultDialogConfig();
- 
+
     dialogConfig.data = {
       dialogTitle:"Malzeme Ekleme",
       mode: 'create'
@@ -149,23 +148,23 @@ addMaterial(){
           this.materials$.subscribe(matlist=>{
             matlist.push(newMaterial);
           })
-          
+
         }
       });
-      
-      
-  
+
+
+
 }
 
 
 
 refreshMaterialArray(groupcode){
   this.getArrayFromObservable();
-  this.filteredMaterialArr = this.materialArr.filter(XX=>XX.groupcode ==groupcode).sort(this.sortByGroupText); 
+  this.filteredMaterialArr = this.materialArr.filter(XX=>XX.groupcode ==groupcode).sort(this.sortByGroupText);
 }
 
 getMaterialsFormLocalStorage(){
-  
+
 
     let localItems = JSON.parse(localStorage.getItem('materials')) as IMaterial[];
      if(localItems && localItems.length>0)
@@ -176,7 +175,7 @@ getMaterialsFormLocalStorage(){
         usersList.push(elem);
       })
    }));
- } 
+ }
 
   this.dataSource = this.materials$;
   if(this.table)
@@ -188,18 +187,19 @@ removeItemFromLocalStorage(item){
   item= localItems.find(x=>x.id == item.id);
   let index= localItems.findIndex(x=> x == item);
   localItems.splice(index,1);
-  localStorage.setItem('categories', JSON.stringify(localItems));
+  localStorage.setItem('materials', JSON.stringify(localItems));
+  this.firebaseService.updateGeneralInfo();
 }
-  
-   getMaterials = () =>   {  
+
+   getMaterials = () =>   {
    this.spinnerService.display(true);
       this.firebaseService
       .getMaterials()
-      .subscribe(res =>( 
-      this.dataSource=res, 
+      .subscribe(res =>(
+      this.dataSource=res,
         this.spinnerService.display(false),
         shareReplay()
-        
+
         ))
       };
 
@@ -216,39 +216,41 @@ removeItemFromLocalStorage(item){
 
          const querySnapshot = this.firestore.collection('category').ref.get().then(cat=>{
 
-         
+
           cat.forEach((doc) => {
-    
+
             const local = doc.data() as ICategory;
             const id = doc.id;
             data.push({ id, ...local } as ICategory);
-    
+
           });
           localStorage.setItem('categories', JSON.stringify(data));
-          
+
          }
          );
          this.categories = data;
 
-        } else { 
-                  
+        } else {
+
           let localItems = JSON.parse(localStorage.getItem('categories')) as ICategory[];
           if(localItems && localItems.length>0)
       {
-         
+
            localItems.forEach(elem=>{
              this.categories.push(elem);
            });
-        
-      } 
-     
+
+      }
+
         }
-        
+
       }
       onGroupChange(ob) {
         this.getArrayFromObservable();
-        this.filteredMaterialArr = this.materialArr.filter(XX=>XX.groupcode ==ob).sort(this.sortByGroupText); 
+        this.filteredMaterialArr = this.materialArr.filter(XX=>XX.groupcode ==ob).sort(this.sortByGroupText);
       }
+
+
 
 }
 

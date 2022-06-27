@@ -1,11 +1,11 @@
 import { UtilityService } from 'src/app/core/services/utility.service';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { selectAllCategories } from './category.selector';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
-import { Observable, of, pipe } from 'rxjs';
+import { Observable, of, pipe, Subscription } from 'rxjs';
 import { filter, map, max, mergeMap, scan, tap } from 'rxjs/internal/operators';
 import { ICategory } from 'src/app/core/core/models/category';
 import { FireBaseService } from 'src/app/core/services/fire-base.service';
@@ -13,27 +13,35 @@ import { AppState } from 'src/app/reducers';
 import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
 import { MatTable } from '@angular/material/table';
 import { SpinnerService } from 'src/app/core/spinner.service';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { IGeneral } from 'src/app/core/core/models/general';
 
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.css']
 })
-export class CategoryComponent implements OnInit {
+export class CategoryComponent implements OnInit,AfterViewInit {
   categoryForm: FormGroup;
    categories$:Observable<ICategory[]>;
    categoryArr:ICategory[];
    localCategory:ICategory ;
    updatedRecord:ICategory;
    displayedColumns: string[] = ['position', 'name','demo-actions'];
+   @ViewChild('paginatorUp') Paginator: MatPaginator;
+   pageEvent: PageEvent;
    mode: 'create' | 'update';
    localstorageMode:'create' | 'update' | 'delete';
   dataSource;
   result;
+  currentPage:number;
+  pageSize:number = 10;
+  pageSizeOptions: number[] = [10, 25, 50];
   categorySaveMessage:string ='Kategori Başarılı bir şeklide eklenmiştir.';
   categoryDeleteMessage:string ='Kategori Başarılı bir şeklide silinmiştir.'
   categoryUpdateMessage:string ='Kategori Başarılı bir şeklide güncellenmiştir.'
   deletedRecordId:string;
+  info:IGeneral;
   @ViewChild(MatTable) table: MatTable<any>;
   constructor(    private firebaseService: FireBaseService,
                 public fb: FormBuilder,
@@ -43,6 +51,15 @@ export class CategoryComponent implements OnInit {
                 private spinnerService: SpinnerService,
                 private utilService:UtilityService) {
     this.reactiveForm();
+
+
+
+
+  }
+  ngAfterViewInit(): void {
+    this.Paginator._intl.itemsPerPageLabel="Her sayfada";
+   this.Paginator._intl.nextPageLabel="Sonraki Sayfa";
+   this.Paginator._intl.previousPageLabel="Önceki Sayfa";
   }
 
   ngOnInit(): void {
@@ -54,16 +71,22 @@ export class CategoryComponent implements OnInit {
  if(!this.firebaseService.IsCategoriesInLocalStorage())
 {
   this.firebaseService.getCategories();
-} 
-    
+}
+
       this.categories$ = this.firebaseService.categories$;
       this.categories$ = this.categories$.pipe(map((data) => {
       data.sort(this.sortByTitle)
       return data;
       }));
-      
-    this.dataSource = this.categories$;
+
+      let currentItems = this.categories$.pipe(
+        map((data)=>{
+        return  data.slice(0,10);
+        }
+      ));
+    this.dataSource = currentItems;
     this.mode ='create';
+    this.dataSource.paginator = this.Paginator;
   }
 
   reactiveForm() {
@@ -74,13 +97,13 @@ export class CategoryComponent implements OnInit {
 
   submitForm(){
     this.spinnerService.display(true);
-    
+
 if(this.mode == 'create'){
   this.localCategory =  {
     categoryid : this.getMaxCategoryId(),
     title : this.categoryForm.controls['title'].value,remarks:''
   };
-  
+
     this.firestore.collection('category').add(this.localCategory).then(response =>{
       console.log("add item console:"+ response.id);
       this.localCategory.id = response.id;
@@ -134,7 +157,7 @@ this.spinnerService.display(false);
   deleteRecord(id: any){
     console.log('Deleted recor is: '+ id);
     this.deletedRecordId = id;
-    
+
     const confirmDialog = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title:'Category Silme Doğrulama',
@@ -154,7 +177,7 @@ this.spinnerService.display(false);
 
       this.localStorageOperation('delete',this.localCategory);
       this.firebaseService.deleteCategorie(id);
-      this.mode ='create';   
+      this.mode ='create';
      // this.generalOperationAfterCrud();
      this.removeItemFromObservable(this.deletedRecordId);
       this.spinnerService.sendClickEvent(this.categoryDeleteMessage);
@@ -187,7 +210,7 @@ this.spinnerService.display(false);
     this.categoryForm.reset();
     this.categoryForm.markAsPristine();
     this.categoryForm.markAsUntouched();
-   
+
     this.mode ='create';
     this.updatedRecord=null;
 
@@ -199,7 +222,7 @@ this.spinnerService.display(false);
     this.dataSource = this.categories$;
     this.localCategory = null;
     this.table.renderRows();
-    
+
   }
 
   localStorageOperation(expr:string,item:ICategory)
@@ -208,7 +231,7 @@ this.spinnerService.display(false);
 
     switch (expr) {
       case 'update':
-      
+
       localItems.find(x=>x.id == item.id).title = item.title;
 
       let objIndex = localItems.findIndex((obj => obj.id == item.id));
@@ -223,7 +246,7 @@ this.spinnerService.display(false);
         localItems.splice(index,1);
       break;
       case 'create':
-        
+
       localItems.push(item);
         break;
       default:
@@ -231,9 +254,42 @@ this.spinnerService.display(false);
     }
     this.utilService.removeItemFromLocalStorage();
     localStorage.setItem('categories', JSON.stringify(localItems));
-    
-    
+    this.firebaseService.updateGeneralInfo();
+
+
   }
 
+  getPaginatorData(event){
+
+    this.pageSize = event.pageSize;
+    this.currentPage= event.currentPage;
+    console.log(event);
+
+    const end = (event.pageIndex + 1) * this.pageSize;
+    const start = event.pageIndex * this.pageSize;
+
+
+
+    this.categories$ = this.categories$.pipe(map((data) => {
+      data.slice(start,end)
+
+      return data;
+      }));
+
+      let y = this.categories$.pipe(
+        map((data)=>{
+
+        return  data.slice(start,end);
+
+        }
+
+
+      ));
+
+      this.dataSource = y;
+      this.dataSource.paginator = this.Paginator;
+    return event;
+
+    }
 
 }

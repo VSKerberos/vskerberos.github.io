@@ -7,7 +7,7 @@ import { CustomMaterialModule } from '../custom-material/custom-material/custom-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore/'; 
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore/';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFireModule } from '@angular/fire/compat';
 import { environment } from 'src/environments/environment';
@@ -37,18 +37,18 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
-    AngularFirestoreModule, 
-    AngularFirestoreModule, 
+    AngularFirestoreModule,
+    AngularFirestoreModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule, // firestore
     AngularFireAuthModule, // aut,
-  
-    
+
+
   ],
   exports: [
     FormsModule,
     ReactiveFormsModule,
-    CustomMaterialModule,    
+    CustomMaterialModule,
     MatInputModule,
     FlexLayoutModule,
     TextInputComponent,
@@ -56,6 +56,6 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     CategoryNamePipe,
     ConfirmDialogComponent
   ],
-  providers: [FireBaseService,SpinnerService,UtilityService]
+  providers: [SpinnerService,UtilityService]
 })
 export class SharedModule { }

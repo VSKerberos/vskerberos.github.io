@@ -8,11 +8,75 @@
         </div>
 
         <div class="container" fxLayout="row" fxLayoutAlign="center none">
-            <div fxFlex="50%" class="text-center no-records animate">
-                <!-- <mat-icon>dashboard</mat-icon> -->
-                <!-- <p>This is the dashboard.</p> -->
-            </div>
-            <mat-icon> </mat-icon>
+
+<div class="col-md-6 col-xl-3">
+            <mat-card class="example-card">
+              <mat-card-header>
+                  <object data="../../../../../../assets/images/colors.svg" width="128" height="128"    mat-card-avatar> </object>
+                <mat-card-title>Malzemeler</mat-card-title>
+                <mat-card-subtitle>
+                  Sistemde Tanımlı Malzeme Bilgisini Gösteren Bölüm
+                </mat-card-subtitle>
+              </mat-card-header>
+              <object data="../../../../../../assets/images/colors.svg" width="128" height="128"    mat-card-image> </object>
+              <mat-card-content>
+
+              </mat-card-content>
+
+              <mat-card-actions>
+                <button mat-raised-button color="primary">{{this.currentGeneral?.numOfMaterial}}</button> <strong style="font-size: 20px;" >&nbsp; adet Malzeme bulunmaktadır.</strong>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+
+          <div class="col-md-6 col-xl-3">
+            <mat-card class="example-card">
+              <mat-card-header>
+
+
+                  <object data="../../../../../../assets/images/civil.svg" width="128" height="128"    mat-card-avatar> </object>
+                <mat-card-title>Grup Bilgisi</mat-card-title>
+                <mat-card-subtitle>
+                  Sistemde Tanımlı Grup Bilgisini Gösteren Bölüm
+                </mat-card-subtitle>
+              </mat-card-header>
+
+
+              <object data="../../../../../../assets/images/civil.svg" width="128" height="128"    mat-card-image> </object>
+              <mat-card-content>
+
+              </mat-card-content>
+
+              <mat-card-actions>
+                <button mat-raised-button color="primary">{{this.currentGeneral?.numOfCategory}}</button> <strong style="font-size: 20px;" >&nbsp; adet Grup bulunmaktadır.</strong>
+              </mat-card-actions>
+            </mat-card>
+
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <mat-card class="example-card">
+              <mat-card-header>
+
+
+                  <object data="../../../../../../assets/images/configuration.svg" width="128" height="128"    mat-card-avatar> </object>
+                <mat-card-title>Ürünler</mat-card-title>
+                <mat-card-subtitle>
+                  Sistemde Tanımlı Ürün Bilgisini Gösteren Bölüm
+                </mat-card-subtitle>
+              </mat-card-header>
+
+
+              <object data="../../../../../../assets/images/configuration.svg" width="128" height="128"    mat-card-image> </object>
+              <mat-card-content>
+
+              </mat-card-content>
+
+              <mat-card-actions>
+                <button mat-raised-button color="primary">{{this.currentGeneral?.numOfProduct}}</button> <strong style="font-size: 20px;" >&nbsp; adet Ürün bulunmaktadır.</strong>
+              </mat-card-actions>
+            </mat-card>
+
+          </div>
         </div>
     </div>
 </div>

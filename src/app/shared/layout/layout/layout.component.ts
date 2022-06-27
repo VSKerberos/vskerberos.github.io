@@ -16,20 +16,20 @@ import { Router } from '@angular/router';
   styleUrls: ['./layout.component.css']
 })
 export class LayoutComponent implements OnInit {
-  
+
   clickEventsubscription:Subscription;
   private _mobileQueryListener: () => void;
   mobileQuery: MediaQueryList;
   showSpinner: boolean;
-  userName: string;
+  userName: string="mavi";
   isAdmin: boolean;
   isLoading: boolean;
   durationInSeconds = 5;
 
   isLoggedIn$:Observable<boolean>;
 
-  
-  constructor( private media: MediaMatcher,private changeDetectorRef: ChangeDetectorRef, 
+
+  constructor( private media: MediaMatcher,private changeDetectorRef: ChangeDetectorRef,
               private spinnerService :SpinnerService,
               public cdRef:ChangeDetectorRef,
               private _snackBar: MatSnackBar,
@@ -62,7 +62,7 @@ export class LayoutComponent implements OnInit {
   }
   openSnackBar(message:string) {
     this._snackBar.open(message,'',{duration: this.durationInSeconds * 1000,horizontalPosition:'center',verticalPosition:'top' });
-  
+
 }
 
 logout() {

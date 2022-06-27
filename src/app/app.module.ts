@@ -13,11 +13,12 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { EffectsModule } from '@ngrx/effects';
 import { EntityDataModule } from '@ngrx/data';
 import { entityConfig } from './entity-metadata';
+import { FireBaseService } from './core/services/fire-base.service';
 
 @NgModule({
   declarations: [
     AppComponent
-    
+
   ],
   imports: [
     BrowserModule,
@@ -31,9 +32,9 @@ import { entityConfig } from './entity-metadata';
     EntityDataModule.forRoot({}),
     StoreRouterConnectingModule.forRoot(),
     EntityDataModule.forRoot(entityConfig)
-    
+
   ],
-  providers: [],
+  providers: [FireBaseService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

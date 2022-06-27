@@ -26,12 +26,14 @@
                         </mat-card-content>
                         <mat-card-actions>
                             <button color="primary" [disabled]='!categoryForm.valid' mat-raised-button>
-                            Kaydet 
+                            Kaydet
                         </button>
 
                             <button color="secondary" (click)="cancel()" mat-raised-button>
                             Temizle
                         </button>
+
+
 
 
 
@@ -55,6 +57,12 @@
 
 </div>
 
+<div class="mat-divider">
+
+</div>
+<mat-paginator #paginatorUp
+[pageSize]="pageSize" [length]="(this.categories$ | async)?.length"
+[pageSizeOptions]="pageSizeOptions"  (page)="pageEvent = getPaginatorData($event)"></mat-paginator>
 
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 

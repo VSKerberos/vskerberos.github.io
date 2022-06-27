@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
             alert('Hatalı Kulalnıcı adı veya Şifre');
             this.form.reset();
         }
-     
+
   }
 
 }

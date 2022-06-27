@@ -1,11 +1,13 @@
 import { ICategory } from 'src/app/core/core/models/category';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { retry } from 'rxjs-compat/operator/retry';
 import { map, shareReplay } from 'rxjs/internal/operators';
-import {IMaterial} from '../core/models/material'
+import {IMaterial} from '../core/models/material';
+import {IGeneral} from '../core/models/general';
 import { IProduct, IProductMat, IProductMaterial } from '../core/models/product';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 @Injectable({
@@ -15,6 +17,8 @@ export class FireBaseService {
    racesCollection: AngularFirestoreCollection<IMaterial>;
 
   constructor(private firestore: AngularFirestore) { }
+
+
 
     _mechanics = new BehaviorSubject<IMaterial[]>([]);
 
@@ -30,7 +34,11 @@ export class FireBaseService {
     private subjectProductMaterial = new BehaviorSubject<IProductMaterial[]>([]);
     materialproduct$: Observable<IProductMaterial[]> = this.subjectProductMaterial.asObservable();
 
+    private subjectGeneral = new BehaviorSubject<IGeneral>(null);
+    generalSubject$:Observable<IGeneral> = this.subjectGeneral.asObservable();
+
     public NewProductId: string;
+    public generalInformation:IGeneral;
 
     private dataStore: { todos: IProductMaterial[] } = { todos: [] };
     private _todos = new BehaviorSubject<IProductMaterial[]>([]);
@@ -46,9 +54,9 @@ export class FireBaseService {
         data.push(doc.data() as IMaterial );
         let d = doc.data() as IMaterial;
       })
-      
+
     });
-      
+
   }
 
   deleteCategorie(data)
@@ -58,7 +66,7 @@ export class FireBaseService {
 
   getMaterials(){
     return this.firestore.collection('material').snapshotChanges().pipe(
-      
+
     );
     }
 
@@ -73,7 +81,7 @@ export class FireBaseService {
         this.subjectMaterial.next(data);
         localStorage.setItem('materials', JSON.stringify(data));
       });
-      
+
       }
 
       deleteProduct(data)
@@ -97,20 +105,20 @@ export class FireBaseService {
      }
 
         getProductDetail(data) {
-        
+
         let local :IProductMaterial[];
         this.localdata=[];
        return this.firestore.collection('productmaterial').doc(data).ref.get().then((doc)=>{
           if(doc.exists){
             local= doc.data()["productMaterial"] as IProductMaterial[];
-            
+
             local.forEach((elem)=>{
               console.log('element id:=>'+elem.id);
               this.localdata.push(elem);
             });
           }
         });
-       
+
       }
 
       clearProductDetail(){
@@ -119,7 +127,7 @@ export class FireBaseService {
 
 
       async getProducts(){
-        const querySnapshot = await this.firestore.collection('product').ref.get();
+        const querySnapshot = await this.firestore.collection('product').ref.orderBy('code').get();
         const data: IProduct[]  =[];
         querySnapshot.forEach((doc)=>{
           const local = doc.data() as IProduct;
@@ -152,7 +160,7 @@ export class FireBaseService {
   {
     return this.firestore.collection('category').add(payload).then(response =>{
       console.log("add item console:"+ response.id);
-      
+
     }).catch(error=>{
       console.log("add item error:"+error)
     });
@@ -168,7 +176,7 @@ export class FireBaseService {
   let data1: ICategory;
   let lastrecord = this.firestore.collection<ICategory>('category', ref => ref.orderBy('categoryid', 'desc').limit(1)).snapshotChanges();
 
-  
+
 
 let c = lastrecord
   .subscribe((data) => {
@@ -178,17 +186,17 @@ let c = lastrecord
       const docId = doc.payload.doc.id;
       data1  = y;
       data1.id = docId;
-      
+
       return {docId,...y};
     });
-    
+
   });
 
-  
+
 
   console.log(` data1 is: ${data}`)
 
- 
+
  }
 
 
@@ -207,22 +215,18 @@ let c = lastrecord
     return this.firestore.collection("material").doc(data).delete();
   }
   updateMaterial(data:IMaterial,id:any) {
- 
+
     //return this.firestore.collection("material").doc(data).update(data);
 
   return  this.firestore.doc('material/' + id).update(data);
  }
-  
- 
+
+
 
   addProduct(mainproduct,productrelation:IProductMat){
     return this.firestore.collection('product').add(mainproduct).then(response =>{
       this.NewProductId = response.id;
       console.log('added product id:'+this.NewProductId);
-
-      // this.firestore.collection('productmaterials').add(productrelation).then(resp=>{
-      //   console.log('addedd product materialid :'+resp.id);
-      // }).catch(err=>{ console.log(err)})
       this.firestore.collection("productmaterial").doc(this.NewProductId).set(productrelation).then(resp=>{
         console.log('addedd product materialid :'+resp);
       }).catch(err=>{ console.log(err)})
@@ -275,5 +279,61 @@ let c = lastrecord
       if(num>0) return true;
       else return false;
   }
+
+
+  addGeneral(generalInfo:IGeneral){
+    return this.firestore.collection('general').add(generalInfo).then(response =>{
+      this.NewProductId = response.id;
+      console.log('added general id:'+response.id);
+    }).catch(error=>{
+      console.log("add item error:"+error)
+    });
+  }
+
+  async getGeneral(): Promise<IGeneral>{
+    let item: IGeneral;
+    const querySnapshot = await this.firestore.collection('general').ref.get();
+
+     querySnapshot.forEach((doc) => {
+       const local = doc.data() as IGeneral;
+       const id = doc.id;
+      item={ id, ...local } as IGeneral;
+     });
+     console.log(item);
+     this.generalInformation= item;
+     this.setGeneral(this.generalInformation);
+     return item ;
+   }
+
+
+   setGeneral(general: IGeneral) {
+    this.subjectGeneral.next(general);
+}
+
+updateGeneral(data:IGeneral,id:any) {
+
+
+
+  return  this.firestore.doc('general/' + id).update(data);
+ }
+
+ updateGeneralInfo(){
+
+
+        let localMaterialItems = JSON.parse(localStorage.getItem('materials')) as IMaterial[];
+        let localProductItems = JSON.parse(localStorage.getItem('products')) as IProduct[];
+        let localCategoriesItems = JSON.parse(localStorage.getItem('categories')) as ICategory[];
+
+
+        this.generalInformation.numOfMaterial = localMaterialItems.length;
+        this.generalInformation.numOfProduct = localProductItems.length;
+        this.generalInformation.numOfCategory  = localCategoriesItems.length;
+        this.updateGeneral(this.generalInformation,this.generalInformation.id).then(()=>{
+          console.log('başarılı');
+        }).catch((message)=>{
+          console.log(message);
+        });
+      }
+
 }
 

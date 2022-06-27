@@ -37,22 +37,22 @@ export class ProductOperationComponent implements OnInit {
       this.mode = 'create';
       this.materialService.accessProductMaterials().subscribe(message=>{
         if(message){
-          this.materialArr.push(message); 
+          this.materialArr.push(message);
           let c = message.total as number;
-          this.sum= math.evaluate(this.sum + message.total)  
+          this.sum= math.evaluate(this.sum + message.total)
         }
       })
-   
-      
+
+
      }
 
-  
+
   ngOnInit(): void {
- 
+
     }
 
   submitForm(){
- 
+
   }
 
   cancel() {
@@ -60,21 +60,18 @@ export class ProductOperationComponent implements OnInit {
   }
   /** Gets the total cost of all transactions. */
   getTotalCost() {
-  //  return this.transactions.map(t => t.cost).reduce((acc, value) => acc + value, 0);
-
-    
     return this.materialArr ? this.materialArr.map(t => t.total).reduce((acc, value) => acc + value, 0) : 0;
 
   }
 
-  
+
   reactiveForm() {
     this.productForm = this.fb.group({
       name: ['',[Validators.required,Validators.minLength(3),Validators.maxLength(50)]],
       code: ['',Validators.required],
       operationdate:[Date,Validators.required]
     });
-    
+
   }
   deleteRecord(mat:IProductMaterial){
 console.log('deleted record: '+ mat.materialname);
